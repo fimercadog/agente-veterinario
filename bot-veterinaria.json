@@ -1,0 +1,3276 @@
+{
+  "_readme": {
+    "name": "Agente Veterinario Bot v2 (limpio)",
+    "descripcion": "Bot menu-driven simple: saludo/menu + Opcion 1 (lee hoja Servicios) + Opcion 2 (lee hoja Faqs). Deterministico, sin IA, a prueba de fallos.",
+    "hojas": {
+      "Servicios": "columnas: nombre | descripcion",
+      "Faqs": "columnas: pregunta | respuesta"
+    }
+  },
+  "nodes": [
+    {
+      "parameters": {
+        "updates": [
+          "message"
+        ],
+        "additionalFields": {}
+      },
+      "id": "tg-trigger",
+      "name": "Telegram Trigger",
+      "type": "n8n-nodes-base.telegramTrigger",
+      "typeVersion": 1.1,
+      "position": [
+        -1700,
+        300
+      ],
+      "webhookId": "dacavet-bot-v2-webhook",
+      "credentials": {
+        "telegramApi": {
+          "id": "XLzbjAEEhE5jgsYe",
+          "name": "Telegram account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "const msg = ($json && $json.message) || $('Telegram Trigger').first().json.message || {};\nconst trans = (($json && $json.transcripcion) || '').toString().trim();\nconst texto = String(trans || msg.text || '').trim();\nconst chatId = String((msg.chat && msg.chat.id) || '');\nconst nombre = (msg.from && msg.from.first_name) || 'Estimado cliente';\nreturn [{ json: { chatId, texto, nombre } }];"
+      },
+      "id": "extraer",
+      "name": "Extraer Variables",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -1480,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "rules": {
+          "values": [
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": false,
+                  "leftValue": "",
+                  "typeValidation": "loose",
+                  "version": 1
+                },
+                "conditions": [
+                  {
+                    "id": "r1",
+                    "leftValue": "={{ $json.ruta }}",
+                    "rightValue": "servicios",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "servicios"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": false,
+                  "leftValue": "",
+                  "typeValidation": "loose",
+                  "version": 1
+                },
+                "conditions": [
+                  {
+                    "id": "r2",
+                    "leftValue": "={{ $json.ruta }}",
+                    "rightValue": "faqs",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "faqs"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": false,
+                  "leftValue": "",
+                  "typeValidation": "loose",
+                  "version": 1
+                },
+                "conditions": [
+                  {
+                    "id": "r4",
+                    "leftValue": "={{ $json.ruta }}",
+                    "rightValue": "asesor",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "asesor"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": false,
+                  "leftValue": "",
+                  "typeValidation": "loose",
+                  "version": 1
+                },
+                "conditions": [
+                  {
+                    "id": "r3",
+                    "leftValue": "={{ $json.ruta }}",
+                    "rightValue": "agendar",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "agendar"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": false,
+                  "leftValue": "",
+                  "typeValidation": "loose",
+                  "version": 1
+                },
+                "conditions": [
+                  {
+                    "id": "r5",
+                    "leftValue": "={{ $json.ruta }}",
+                    "rightValue": "seguimiento_resp",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "seguimiento_resp"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": false,
+                  "leftValue": "",
+                  "typeValidation": "loose",
+                  "version": 1
+                },
+                "conditions": [
+                  {
+                    "id": "r6",
+                    "leftValue": "={{ $json.ruta }}",
+                    "rightValue": "encuesta",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "encuesta"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": false,
+                  "leftValue": "",
+                  "typeValidation": "loose",
+                  "version": 1
+                },
+                "conditions": [
+                  {
+                    "id": "rc",
+                    "leftValue": "={{ $json.ruta }}",
+                    "rightValue": "calma",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "calma"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": false,
+                  "leftValue": "",
+                  "typeValidation": "loose",
+                  "version": 1
+                },
+                "conditions": [
+                  {
+                    "id": "rs",
+                    "leftValue": "={{ $json.ruta }}",
+                    "rightValue": "seguridad",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "seguridad"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": false,
+                  "leftValue": "",
+                  "typeValidation": "loose",
+                  "version": 1
+                },
+                "conditions": [
+                  {
+                    "id": "rb",
+                    "leftValue": "={{ $json.ruta }}",
+                    "rightValue": "buscar",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "buscar"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": false,
+                  "leftValue": "",
+                  "typeValidation": "loose",
+                  "version": 1
+                },
+                "conditions": [
+                  {
+                    "id": "rcr",
+                    "leftValue": "={{ $json.ruta }}",
+                    "rightValue": "confirmar_recordatorio",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "confirmar_recordatorio"
+            }
+          ]
+        },
+        "options": {
+          "fallbackOutput": "extra"
+        }
+      },
+      "id": "switch",
+      "name": "Switch Opciones",
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 3,
+      "position": [
+        -1260,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "const t = '🐾 ¡Hola! Soy Luna, tu asistente virtual de Agente Veterinario\\nClínica Quirúrgica Veterinaria Especializada\\n\\nAl usar este chat aceptas nuestras políticas de privacidad:\\nhttps://bot-agencia.tech/en/privacy/\\n\\n📌 Instrucciones\\n• Para elegir una opción escribe solo el número. Ejemplo: 1\\n• Cuando te haga una pregunta abierta sigue las indicaciones\\n• Puedes escribir o enviarme una nota de voz 🎤\\n\\n🤔 ¿Cómo puedo ayudarte? Escribe el número de la opción:\\n\\n1. 📋 Servicios e información\\n2. ❓ Preguntas frecuentes\\n3. 📅 Gestionar mi cita\\n4. 👤 Hablar con un asesor';\nreturn [{ json: { textoFinal: t } }];"
+      },
+      "id": "code-menu",
+      "name": "Code Menu",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -1020,
+        460
+      ]
+    },
+    {
+      "parameters": {
+        "documentId": {
+          "__rl": true,
+          "value": "1jFygCoys6lPfHi8Ip5owcBGcY3Ls13vFQvJnfIcIly0",
+          "mode": "id"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "Servicios",
+          "mode": "name"
+        },
+        "options": {}
+      },
+      "id": "leer-serv",
+      "name": "Leer Servicios",
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.5,
+      "position": [
+        -1020,
+        140
+      ],
+      "alwaysOutputData": true,
+      "onError": "continueRegularOutput",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "jGJOqR9SAx3N3hxy",
+          "name": "Google Sheets dacavet"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "const esc = s => String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');\nlet t = '📋 Servicios Agente Veterinario\\n\\n';\ntry {\n  const filas = ($('Leer Servicios').all() || []).map(i => i.json).filter(f => f && typeof f === 'object');\n  for (const f of filas) {\n    const nom = String(f.nombres || f.nombre || f.servicio || '').trim();\n    const desc = String(f.descripcion || f['descripción'] || '').trim();\n    if (nom) t += '• ' + esc(nom) + (desc ? ': ' + esc(desc) : '') + '\\n';\n  }\n} catch (e) {}\nt += '\\nEscribe 0 para volver al menú.';\nreturn [{ json: { textoFinal: t } }];"
+      },
+      "id": "code-serv",
+      "name": "Code Servicios",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -800,
+        140
+      ]
+    },
+    {
+      "parameters": {
+        "documentId": {
+          "__rl": true,
+          "value": "1jFygCoys6lPfHi8Ip5owcBGcY3Ls13vFQvJnfIcIly0",
+          "mode": "id"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "Faqs",
+          "mode": "name"
+        },
+        "options": {}
+      },
+      "id": "leer-faqs",
+      "name": "Leer Faqs",
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.5,
+      "position": [
+        -1020,
+        300
+      ],
+      "alwaysOutputData": true,
+      "onError": "continueRegularOutput",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "jGJOqR9SAx3N3hxy",
+          "name": "Google Sheets dacavet"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "const esc = s => String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');\nlet t = '❓ Preguntas frecuentes\\n\\n';\ntry {\n  const filas = ($('Leer Faqs').all() || []).map(i => i.json).filter(f => f && typeof f === 'object');\n  for (const f of filas) {\n    const p = String(f.pregunta || '').trim();\n    const r = String(f.respuesta || '').trim();\n    if (p) t += esc(p) + '\\n' + esc(r) + '\\n\\n';\n  }\n} catch (e) {}\nt += 'Escribe 0 para volver al menú.';\nreturn [{ json: { textoFinal: t } }];"
+      },
+      "id": "code-faqs",
+      "name": "Code Faqs",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -800,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "chatId": "={{ $('Extraer Variables').item.json.chatId }}",
+        "text": "={{ $json.textoFinal }}",
+        "additionalFields": {
+          "appendAttribution": false,
+          "parse_mode": "HTML"
+        }
+      },
+      "id": "tg-enviar",
+      "name": "Telegram Enviar",
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        -560,
+        300
+      ],
+      "webhookId": "dacavet-enviar-v2",
+      "credentials": {
+        "telegramApi": {
+          "id": "XLzbjAEEhE5jgsYe",
+          "name": "Telegram account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "const ev = $('Extraer Variables').first().json;\nconst chatId = String(ev.chatId || '');\nconst texto = String(ev.texto || '').trim();\nconst nombre = ev.nombre || '';\nif (!chatId) return [{ json: { ok: false } }];\nconst ruta = String($json.ruta || '');\nconst store = $getWorkflowStaticData('global');\nstore.conv = store.conv || {};\nlet c = store.conv[chatId] || { chatId, nombre, firstMs: Date.now(), freeTexts: [], opciones: [] };\nif (nombre) c.nombre = nombre;\nc.opciones = c.opciones || []; c.freeTexts = c.freeTexts || [];\nc.lastMs = Date.now();\nif (!c.firstMs) c.firstMs = Date.now();\nconst tl = texto.toLowerCase();\nconst rutaLabel = { servicios: 'Servicios', faqs: 'FAQs', asesor: 'Asesor', agendar: 'Gestionar cita' };\nconst esNav = texto === '0' || tl === '/start' || tl === 'menu' || tl === 'inicio' || texto === '';\nconst esNumero = /^\\d+$/.test(texto);\nif (!esNav) {\n  if (rutaLabel[ruta] && !c.opciones.includes(rutaLabel[ruta])) c.opciones.push(rutaLabel[ruta]);\n  if (!esNumero) c.freeTexts.push(texto);\n}\nstore.conv[chatId] = c;\nreturn [{ json: { ok: true } }];"
+      },
+      "id": "acumular",
+      "name": "Code Acumular Conversacion",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -1260,
+        540
+      ]
+    },
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "minutes",
+              "minutesInterval": 1
+            }
+          ]
+        }
+      },
+      "id": "sched-reg",
+      "name": "Schedule Registro",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.2,
+      "position": [
+        -1700,
+        760
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "// Cierra conversaciones con mas de 15 min sin escribir y arma la fila para Registro.\nconst store = $getWorkflowStaticData('global');\nstore.conv = store.conv || {};\nconst GAP = 2 * 60 * 1000;\nconst now = Date.now();\nconst pad = n => String(n).padStart(2, '0');\nfunction bogotaFrom(ms) {\n  const b = new Date(ms - 5 * 3600000);\n  const dia = b.getUTCFullYear() + '-' + pad(b.getUTCMonth()+1) + '-' + pad(b.getUTCDate());\n  const hora = pad(b.getUTCHours()) + ':' + pad(b.getUTCMinutes());\n  const ts = dia + ' ' + hora + ':' + pad(b.getUTCSeconds());\n  const min = b.getUTCHours() * 60 + b.getUTCMinutes();\n  const horario = (min >= 480 && min < 1260) ? 'Dentro de horario' : 'Fuera de horario';\n  return { dia, hora, ts, horario };\n}\nconst out = [];\nfor (const chatId of Object.keys(store.conv)) {\n  const c = store.conv[chatId];\n  if (c && c.lastMs && (now - c.lastMs) > GAP) {\n    const bg = bogotaFrom(c.firstMs || c.lastMs);\n    let mensaje = '';\n    if (c.freeTexts && c.freeTexts.length) mensaje += c.freeTexts.join(' | ');\n    if (c.opciones && c.opciones.length) mensaje += (mensaje ? ' — ' : '') + 'Consultó: ' + c.opciones.join(', ');\n    if (!mensaje) mensaje = 'Interacción sin contenido';\n    out.push({ json: {\n      timestamp: bg.ts,\n      horario: bg.horario,\n      chatId,\n      nombre: c.nombre || 'Sin nombre',\n      mensaje,\n      hora_bogota: bg.hora,\n      dia: bg.dia,\n      sede: 'Sin definir'\n    } });\n    delete store.conv[chatId];\n  }\n}\nreturn out;"
+      },
+      "id": "flush",
+      "name": "Code Flush Conversaciones",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -1480,
+        760
+      ]
+    },
+    {
+      "parameters": {
+        "operation": "append",
+        "documentId": {
+          "__rl": true,
+          "value": "1jFygCoys6lPfHi8Ip5owcBGcY3Ls13vFQvJnfIcIly0",
+          "mode": "id"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "Registro",
+          "mode": "name"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "timestamp": "={{ $json.timestamp }}",
+            "horario": "={{ $json.horario }}",
+            "chatId": "={{ $json.chatId }}",
+            "nombre": "={{ $json.nombre }}",
+            "mensaje": "={{ $json.mensaje }}",
+            "hora_bogota": "={{ $json.hora_bogota }}",
+            "dia": "={{ $json.dia }}",
+            "sede": "={{ $json.sede }}"
+          },
+          "matchingColumns": [],
+          "schema": []
+        },
+        "options": {}
+      },
+      "id": "guardar-reg",
+      "name": "Sheets Guardar Registro",
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.5,
+      "position": [
+        -1260,
+        760
+      ],
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "jGJOqR9SAx3N3hxy",
+          "name": "Google Sheets dacavet"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "loose",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "aud",
+              "leftValue": "={{ $json.message?.voice?.file_id || $json.message?.audio?.file_id || '' }}",
+              "rightValue": "",
+              "operator": {
+                "type": "string",
+                "operation": "notEmpty",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "id": "if-audio",
+      "name": "IF Es Audio",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        -1620,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "resource": "file",
+        "fileId": "={{ $json.message?.voice?.file_id || $json.message?.audio?.file_id }}",
+        "additionalFields": {}
+      },
+      "id": "desc-audio",
+      "name": "Telegram Descargar Audio",
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        -1480,
+        140
+      ],
+      "webhookId": "dacavet-desc-audio-v2",
+      "credentials": {
+        "telegramApi": {
+          "id": "XLzbjAEEhE5jgsYe",
+          "name": "Telegram account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "resource": "audio",
+        "operation": "transcribe",
+        "options": {
+          "language": "es"
+        }
+      },
+      "id": "transcribir",
+      "name": "OpenAI Transcribir",
+      "type": "@n8n/n8n-nodes-langchain.openAi",
+      "typeVersion": 1.8,
+      "position": [
+        -1320,
+        140
+      ],
+      "credentials": {
+        "openAiApi": {
+          "id": "OjFcCRZeWYJiAzUa",
+          "name": "OpenAI dacavet"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "const msg = $('Telegram Trigger').first().json.message;\nconst transcripcion = (($input.first().json && $input.first().json.text) || '').toString().trim();\nreturn [{ json: { message: msg, transcripcion } }];"
+      },
+      "id": "normalizar",
+      "name": "Normalizar Audio",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -1160,
+        140
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "const t = String($json.texto || '').toLowerCase().trim();\nconst has = s => t.includes(s);\nconst chatId = String($json.chatId || '');\nconst store = $getWorkflowStaticData('global');\nconst ret = (ruta) => [{ json: { texto: $json.texto, chatId: $json.chatId, nombre: $json.nombre, ruta } }];\n\nif (t === '/start' || t === 'start' || t === '/menu' || t === 'menu' || t === 'menú' || t === 'inicio') {\n  if (store.agendar) delete store.agendar[chatId];\n  if (store.recordatorioPend) delete store.recordatorioPend[chatId];\n  return ret('menu');\n}\nconst segLista = (store.seguimiento && store.seguimiento.lista) || [];\nif (chatId === '5050987637' && segLista.length && /^\\d+\\s+(si|sí|s|no|n)$/i.test(t)) return ret('seguimiento_resp');\nif (store.encuesta && store.encuesta[chatId]) return ret('encuesta');\nif (store.agendar && store.agendar[chatId]) return ret('agendar');\nif (store.recordatorioPend && store.recordatorioPend[chatId]) return ret('confirmar_recordatorio');\n\n// --- Blindaje (fuera de flujo) ---\nconst palabras = t.split(/[^a-záéíóúüñ0-9]+/i).filter(Boolean);\nconst groserias = new Set(['mierda','puta','puto','putas','putos','hijueputa','hpta','gonorrea','marica','maricon','maricón','malparido','malparida','imbecil','imbécil','idiota','idiotas','estupido','estúpido','estupida','estúpida','pendejo','pendeja','cabron','cabrón','verga','huevon','huevón','güevon','joder','jodido','carajo','coño','maldito','maldita','malnacido','tarado','baboso','inutil','inútil','ratero','ladron','ladrón','estafador','estafadores','basura','asco']);\nif (palabras.some(w => groserias.has(w))) return ret('calma');\n\nconst digitos = t.replace(/[^0-9]/g, '');\nif (digitos.length >= 12 || has('contraseña') || has('contrasena') || has('password') || has('cvv') || has('numero de tarjeta') || has('número de tarjeta')) return ret('seguridad');\n\nlet ruta = 'menu';\nif (t === '1' || t === 'uno' || has('servicio')) ruta = 'servicios';\nelse if (t === '2' || t === 'dos' || has('pregunta') || has('horario') || has('faq') || has('frecuente') || has('duda')) ruta = 'faqs';\nelse if (t === '4' || t === 'cuatro' || has('asesor') || has('persona') || has('humano') || has('hablar con')) ruta = 'asesor';\nelse if (t === '3' || t === 'tres' || has('agendar') || has('agéndame') || has('agendame') || has('reservar') || has('reprogram') || has('cancelar') || has('anular') || has('gestionar') || has('mis citas') || has('quiero una cita') || has('quiero cita') || has('sacar cita') || has('sacar una cita') || has('pedir cita') || has('pedir una cita') || has('nueva cita') || has('una cita para') || has('un turno')) ruta = 'agendar';\nelse if (t === '0' || t === '' || /^(hola|holaa|holi|ola|buenas|buenos dias|buenos días|buenas tardes|buenas noches|hey|saludos|que tal|qué tal|buen dia|buen día)/.test(t)) ruta = 'menu';\nelse ruta = 'buscar';\nreturn ret(ruta);"
+      },
+      "id": "router",
+      "name": "Code Router",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -1340,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "documentId": {
+          "__rl": true,
+          "value": "1jFygCoys6lPfHi8Ip5owcBGcY3Ls13vFQvJnfIcIly0",
+          "mode": "id"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "configuracion",
+          "mode": "name"
+        },
+        "options": {}
+      },
+      "id": "leer-config",
+      "name": "Leer Configuracion",
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.5,
+      "position": [
+        -1020,
+        620
+      ],
+      "alwaysOutputData": true,
+      "onError": "continueRegularOutput",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "jGJOqR9SAx3N3hxy",
+          "name": "Google Sheets dacavet"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "const esc = s => String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');\nfunction toMin(s) {\n  const m = String(s).trim().toUpperCase().match(/(\\d{1,2}):(\\d{2})\\s*(AM|PM)?/);\n  if (!m) return null;\n  let h = parseInt(m[1], 10); const min = parseInt(m[2], 10); const ap = m[3];\n  if (ap === 'PM' && h < 12) h += 12;\n  if (ap === 'AM' && h === 12) h = 0;\n  return h * 60 + min;\n}\nconst cfg = (($('Leer Configuracion').all() || []).map(i => i.json).filter(f => f && f.horario))[0] || {};\nconst horario = String(cfg.horario || '8:00 AM - 9:00 PM');\nconst link = String(cfg.telegram || 'https://t.me/fimercadog_asesor');\nconst asesorChatId = String(cfg.id || '5050987637');\nconst duenoChatId = String(cfg['dueño'] || cfg['dueno'] || asesorChatId);\nconst partes = horario.split('-');\nconst ap = toMin(partes[0]); const ci = toMin(partes[1]);\nconst apertura = (ap == null) ? 480 : ap;\nconst cierre = (ci == null) ? 1260 : ci;\nconst aperturaTxt = (partes[0] || '8:00 AM').trim();\nconst b = new Date(Date.now() - 5 * 3600000);\nconst nowMin = b.getUTCHours() * 60 + b.getUTCMinutes();\nconst dentro = nowMin >= apertura && nowMin < cierre;\nlet falta = '';\nif (!dentro) {\n  let f = (nowMin < apertura) ? (apertura - nowMin) : ((1440 - nowMin) + apertura);\n  const hh = Math.floor(f / 60); const mm = f % 60;\n  if (hh && mm) falta = hh + (hh > 1 ? ' horas' : ' hora') + ' y ' + mm + ' minutos';\n  else if (hh) falta = hh + (hh > 1 ? ' horas' : ' hora');\n  else falta = mm + ' minutos';\n}\nconst ev = $('Extraer Variables').first().json;\nconst nombre = ev.nombre || 'Cliente';\nconst chatId = ev.chatId;\nconst store = $getWorkflowStaticData('global');\nconst conv = (store.conv && store.conv[chatId]) || {};\nconst contexto = (conv.freeTexts && conv.freeTexts.length) ? conv.freeTexts.join(' | ') : (ev.texto || 'Pidió hablar con un asesor');\nlet textoFinal;\nif (dentro) {\n  textoFinal = 'Con gusto te conecto con un asesor de Agente Veterinario 👤\\nEscribe o haz clic aquí: ' + link;\n} else {\n  textoFinal = 'Nuestro equipo humano está fuera de horario en este momento ⏰\\nPuedes dejar tu mensaje aquí 👉 ' + link + '\\n\\nQuedas en cola y te responderán en aproximadamente ' + falta + ', mañana a partir de las ' + aperturaTxt + ' 🐾';\n}\nconst avisoTexto = '🔔 Cliente solicita asesor — Agente Veterinario\\n👤 Cliente: ' + esc(nombre) + '\\n🆔 ChatID: ' + chatId + '\\n💬 ' + esc(contexto);\nreturn [{ json: { textoFinal, avisoTexto, asesorChatId, duenoChatId } }];"
+      },
+      "id": "code-asesor",
+      "name": "Code Asesor",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -800,
+        620
+      ]
+    },
+    {
+      "parameters": {
+        "chatId": "={{ $json.asesorChatId }}",
+        "text": "={{ $json.avisoTexto }}",
+        "additionalFields": {
+          "appendAttribution": false,
+          "parse_mode": "HTML"
+        }
+      },
+      "id": "avisar-asesor",
+      "name": "Telegram Avisar Asesor",
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        -560,
+        620
+      ],
+      "webhookId": "dacavet-avisar-asesor-v2",
+      "credentials": {
+        "telegramApi": {
+          "id": "XLzbjAEEhE5jgsYe",
+          "name": "Telegram account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "documentId": {
+          "__rl": true,
+          "value": "1jFygCoys6lPfHi8Ip5owcBGcY3Ls13vFQvJnfIcIly0",
+          "mode": "id"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "especialidad",
+          "mode": "name"
+        },
+        "options": {}
+      },
+      "id": "leer-esp",
+      "name": "Leer Especialidad",
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.5,
+      "position": [
+        -1020,
+        780
+      ],
+      "alwaysOutputData": true,
+      "onError": "continueRegularOutput",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "jGJOqR9SAx3N3hxy",
+          "name": "Google Sheets dacavet"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "const ev = $('Extraer Variables').first().json;\nconst chatId = String(ev.chatId || '');\nconst texto = String(ev.texto || '').trim();\nconst tl = texto.toLowerCase();\nconst store = $getWorkflowStaticData('global');\nstore.agendar = store.agendar || {};\nconst cap = s => s ? (s.charAt(0).toUpperCase() + s.slice(1)) : s;\nconst pad = n => String(n).padStart(2, '0');\n\n// especialidades activas\nlet esps = [];\ntry {\n  esps = ($('Leer Especialidad').all() || []).map(i => i.json)\n    .filter(f => f && String(f.estado || '').toLowerCase().includes('activ'))\n    .map(f => cap(String(f.nombre || f.especialidad || '').trim()))\n    .filter(Boolean);\n} catch (e) {}\nif (!esps.length) esps = ['General', 'Cirugía', 'Vacunación'];\n\nconst CAL = {\n  '1': { sede: 'Sede 1', calId: '76224551305cf247fb1fac39416e191f3d89d01b7dee161bcbd902be1b1de0a1@group.calendar.google.com' },\n  '2': { sede: 'Sede 2', calId: 'a8e971b77565b2856eee7cece902e672f359ef5eb3f30f84c02a721849960309@group.calendar.google.com' }\n};\nconst DIAS = ['Dom', 'Lun', 'Mar', 'Mié', 'Jue', 'Vie', 'Sáb'];\nfunction bogNow() { return new Date(Date.now() - 5 * 3600000); }\nfunction menuSede() { return '🏥 ¿En qué sede quieres tu cita?\\n\\n1. Sede 1\\n2. Sede 2\\n\\nEscribe 1 o 2 (o 0 para salir).'; }\nfunction menuEsp() { let m = '🩺 ¿Qué especialidad necesitas?\\n\\n'; esps.forEach((e, i) => { m += (i + 1) + '. ' + e + '\\n'; }); m += '\\nEscribe el número (si es algo general, elige General). 0 para salir.'; return m; }\nfunction menuDias() {\n  const OPEN = 8 * 60, CLOSE = 21 * 60, SLOT = 40;\n  const b = bogNow();\n  const nowMin = b.getUTCHours() * 60 + b.getUTCMinutes();\n  const inicio = (Math.max(OPEN, nowMin + 30) <= CLOSE - SLOT) ? 0 : 1;\n  const arr = []; let m = '📅 ¿Para qué día quieres la cita?\\n\\n';\n  for (let k = 0; k < 7; k++) {\n    const i = inicio + k;\n    const x = new Date(b.getTime() + i * 86400000);\n    const ymd = x.getUTCFullYear() + '-' + pad(x.getUTCMonth() + 1) + '-' + pad(x.getUTCDate());\n    const et = (i === 0 ? 'Hoy' : (i === 1 ? 'Mañana' : DIAS[x.getUTCDay()])) + ' ' + pad(x.getUTCDate()) + '/' + pad(x.getUTCMonth() + 1);\n    arr.push({ ymd, et }); m += (k + 1) + '. ' + et + '\\n';\n  }\n  m += '\\nEscribe el número del día (0 para salir).'; return { m, arr };\n}\nconst R = (txt) => [{ json: { accion: 'responder', textoFinal: txt } }];\n\n// salir\nif (tl === '0' || tl === 'salir' || tl === 'menu') {\n  delete store.agendar[chatId];\n  return [{ json: { accion: 'menu' } }];\n}\n\nlet st = store.agendar[chatId];\nif (!st) {\n  store.agendar[chatId] = { paso: 'submenu', datos: {} };\n  if (/(reprogram|cambiar.*(cita|fecha|hora)|mover.*cita)/.test(tl)) return [{ json: { accion: 'reprog_listar' } }];\n  if (/(cancelar|anular)/.test(tl)) return [{ json: { accion: 'cancel_listar' } }];\n  if (/(ver.*cita|consultar|mis citas|tengo.*cita|cuales.*cita|cuáles.*cita)/.test(tl)) return [{ json: { accion: 'ver' } }];\n  if (/(agendar|agéndame|agendame|reservar|sacar.*cita|pedir.*cita|nueva cita|quiero.*cita|una cita|un turno|programar)/.test(tl)) { store.agendar[chatId].paso = 'nombre'; return R('📝 Vamos a agendar tu cita.\\n\\n¿Cuál es tu nombre completo?'); }\n  return R('📅 Gestionar mi cita\\n\\n1. Agendar una cita\\n2. Consultar mis citas\\n3. Reprogramar\\n4. Cancelar\\n\\nEscribe el número (0 para salir).');\n}\nconst datos = st.datos;\n\nif (st.paso === 'submenu') {\n  if (texto === '1') { st.paso = 'nombre'; return R('📝 Vamos a agendar tu cita.\\n\\n¿Cuál es tu nombre completo?'); }\n  if (texto === '2') return [{ json: { accion: 'ver' } }];\n  if (texto === '3') return [{ json: { accion: 'reprog_listar' } }];\n  if (texto === '4') return [{ json: { accion: 'cancel_listar' } }];\n  return R('📅 Gestionar mi cita\\n\\n1. Agendar una cita\\n2. Consultar mis citas\\n3. Reprogramar\\n4. Cancelar\\n\\nEscribe el número (0 para salir).');\n}\nif (st.paso === 'nombre') {\n  datos.nombre = texto;\n  st.paso = 'mascota';\n  return R('🐾 ¿Cómo se llama tu mascota? (si quieres dime también si es perro, gato, etc.)');\n}\nif (st.paso === 'mascota') {\n  let especie = '';\n  if (tl.indexOf('perr') >= 0 || tl.indexOf('canin') >= 0 || tl.indexOf('cachorr') >= 0) especie = 'Perro';\n  else if (tl.indexOf('gat') >= 0 || tl.indexOf('felin') >= 0 || tl.indexOf('minin') >= 0) especie = 'Gato';\n  else if (tl.indexOf('conej') >= 0) especie = 'Conejo';\n  else if (tl.indexOf('ave') >= 0 || tl.indexOf('loro') >= 0 || tl.indexOf('pajar') >= 0 || tl.indexOf('pájar') >= 0) especie = 'Ave';\n  else if (tl.indexOf('hamster') >= 0 || tl.indexOf('hámster') >= 0 || tl.indexOf('cuy') >= 0 || tl.indexOf('roedor') >= 0) especie = 'Roedor';\n  const fillers = ['mi','el','la','los','las','un','una','se','llama','llamado','llamada','es','son','y','mascota','perro','perrito','perra','gato','gatito','gata','canino','felino','cachorro','minino','conejo','ave','loro','pajaro','pájaro','hamster','hámster','cuy','roedor'];\n  let nom = texto.split(/\\s+/).map(w => w.replace(/[.,]/g, '')).filter(w => w && fillers.indexOf(w.toLowerCase()) < 0).join(' ').trim();\n  datos.mascota = nom || texto.trim();\n  if (especie) { datos.especie = especie; st.paso = 'sede'; return R(menuSede()); }\n  st.paso = 'especie';\n  return R('¿Qué tipo de mascota es ' + datos.mascota + '? (perro, gato, u otro)');\n}\nif (st.paso === 'especie') {\n  let especie = cap(texto.trim());\n  if (tl.indexOf('perr') >= 0 || tl.indexOf('canin') >= 0) especie = 'Perro';\n  else if (tl.indexOf('gat') >= 0 || tl.indexOf('felin') >= 0) especie = 'Gato';\n  datos.especie = especie;\n  st.paso = 'sede';\n  return R(menuSede());\n}\nif (st.paso === 'sede') {\n  const sel = CAL[texto];\n  if (!sel) return R(menuSede());\n  datos.sede = sel.sede; datos.calId = sel.calId;\n  st.paso = 'especialidad'; st.esps = esps;\n  return R(menuEsp());\n}\nif (st.paso === 'especialidad') {\n  const lista = st.esps || esps;\n  const i = parseInt(texto, 10);\n  if (!i || i < 1 || i > lista.length) return R(menuEsp());\n  datos.especialidad = lista[i - 1];\n  st.paso = 'dia';\n  const md = menuDias(); st.dias = md.arr;\n  return R(md.m);\n}\nif (st.paso === 'dia') {\n  const dias = st.dias || [];\n  const i = parseInt(texto, 10);\n  if (!i || i < 1 || i > dias.length) { const md = menuDias(); st.dias = md.arr; return R(md.m); }\n  const dia = dias[i - 1];\n  datos.fecha = dia.ymd; datos.fechaTxt = dia.et;\n  st.paso = 'hora'; st.slotPage = 0;\n  return [{ json: { accion: 'slots', calId: datos.calId, timeMin: dia.ymd + 'T00:00:00-05:00', timeMax: dia.ymd + 'T23:59:59-05:00', fecha: dia.ymd } }];\n}\nif (st.paso === 'reprog_elegir') {\n  const lista = st.lista || [];\n  const i = parseInt(texto, 10);\n  if (!i || i < 1 || i > lista.length) return R('🔄 Escribe el número de una cita de la lista (0 para salir).');\n  const c = lista[i - 1];\n  datos.event_id = c.event_id; datos.calId = c.calId; datos.sede = c.sede;\n  datos.mascota = c.mascota; datos.especie = c.especie; datos.especialidad = c.especialidad;\n  st.paso = 'dia';\n  const md = menuDias(); st.dias = md.arr;\n  return R('🔄 Reprogramando: ' + c.mascota + ' — ' + c.especialidad + '\\n\\n' + md.m);\n}\nif (st.paso === 'cancel_elegir') {\n  const lista = st.lista || [];\n  const i = parseInt(texto, 10);\n  if (!i || i < 1 || i > lista.length) return R('❌ Escribe el número de una cita de la lista (0 para salir).');\n  const c = lista[i - 1];\n  datos.event_id = c.event_id; datos.calId = c.calId; datos.sede = c.sede;\n  datos.mascota = c.mascota; datos.especie = c.especie; datos.especialidad = c.especialidad;\n  datos.fecha = c.fecha; datos.hora_cita = c.hora;\n  st.paso = 'cancel_confirmar';\n  return R('⚠️ ¿Seguro que quieres CANCELAR esta cita?\\n\\n🐾 ' + c.mascota + ' (' + c.especie + ')\\n🩺 ' + c.especialidad + '\\n📅 ' + c.fecha + ' a las ' + c.hora + '\\n🏥 ' + c.sede + '\\n\\n1. Sí, cancelar\\n0. No, volver al menú');\n}\nif (st.paso === 'cancel_confirmar') {\n  if (texto === '1' || tl === 'si' || tl === 'sí' || tl === 'confirmar') {\n    st.paso = 'cancelando';\n    return [{ json: { accion: 'cancelar', calId: datos.calId, event_id: datos.event_id, mascota: datos.mascota, especie: datos.especie, especialidad: datos.especialidad, sede: datos.sede, hora_cita: datos.hora_cita, fecha_cita: datos.fecha, chatId } }];\n  }\n  return R('Para CANCELAR marca 1, o marca 0 para volver sin cancelar.');\n}\nif (st.paso === 'hora') {\n  const slots = st.slots || [];\n  const i = parseInt(texto, 10);\n  const hayMas = st.slotsAll && (((st.slotPage || 0) + 1) * 8 < st.slotsAll.length);\n  if (hayMas && i === slots.length + 1) { st.slotPage = (st.slotPage || 0) + 1; return [{ json: { accion: 'slots', calId: datos.calId, timeMin: datos.fecha + 'T00:00:00-05:00', timeMax: datos.fecha + 'T23:59:59-05:00', fecha: datos.fecha } }]; }\n  if (!i || i < 1 || i > slots.length) {\n    return [{ json: { accion: 'slots', calId: datos.calId, timeMin: datos.fecha + 'T00:00:00-05:00', timeMax: datos.fecha + 'T23:59:59-05:00', fecha: datos.fecha } }];\n  }\n  const s = slots[i - 1];\n  if (new Date(s.startISO).getTime() <= Date.now() + 300000) { return [{ json: { accion: 'slots', calId: datos.calId, timeMin: datos.fecha + 'T00:00:00-05:00', timeMax: datos.fecha + 'T23:59:59-05:00', fecha: datos.fecha } }]; }\n  datos.hora_cita = s.hora; datos.startISO = s.startISO; datos.endISO = s.endISO;\n  if (st.modo === 'reprog') { st.paso = 'reprogramando'; return [{ json: { accion: 'reprogramar', calId: datos.calId, event_id: datos.event_id, startISO: datos.startISO, endISO: datos.endISO, mascota: datos.mascota, especie: datos.especie, especialidad: datos.especialidad, sede: datos.sede, hora_cita: datos.hora_cita, fecha_cita: datos.fecha, chatId } }]; }\n  st.paso = 'observaciones';\n  return R('✍️ Por último: ¿cuál es el motivo de la cita? Cuéntame por qué la necesitas (ej: vacunación, está decaído, control, una pata rota...).');\n}\nif (st.paso === 'observaciones') {\n  datos.mensaje = texto;\n  st.paso = 'confirmar';\n  let __av = '';\n  if (datos.startISO) { const __m = Math.round((new Date(datos.startISO).getTime() - Date.now()) / 60000); if (__m > 0 && __m < 60) __av = '\\n\\n⚠️ ¡Atención! Tu cita es muy pronto, en ' + __m + ' minutos. Por favor llega a tiempo 🐾.'; }\n  const res = '📋 Revisa tu cita:\\n\\n👤 ' + datos.nombre + '\\n🐾 ' + datos.mascota + ' (' + datos.especie + ')\\n🩺 ' + datos.especialidad + '\\n🏥 ' + datos.sede + '\\n📅 ' + datos.fechaTxt + ' a las ' + datos.hora_cita + '\\n📝 ' + datos.mensaje + __av + '\\n\\n¿Confirmas?\\n1. Sí, agendar\\n0. Cancelar';\n  return R(res);\n}\nif (st.paso === 'confirmar') {\n  if (texto === '1' || tl === 'si' || tl === 'sí' || tl === 'confirmar' || tl === 'confirmo') {\n    st.paso = 'creando';\n    const summary = 'Agente Veterinario: ' + datos.mascota + ' (' + datos.especie + ') - ' + datos.nombre;\n    const description = 'ChatID:' + chatId + ' | Cliente: ' + datos.nombre + ' | Mascota: ' + datos.mascota + ' (' + datos.especie + ') | Especialidad: ' + datos.especialidad + ' | Observaciones: ' + datos.mensaje + ' | Sede: ' + datos.sede;\n    return [{ json: {\n      accion: 'crear', calId: datos.calId, startISO: datos.startISO, endISO: datos.endISO, summary, description,\n      chatId, nombre: datos.nombre, mascota: datos.mascota, especie: datos.especie,\n      especialidad: datos.especialidad, mensaje: datos.mensaje, hora_cita: datos.hora_cita, fecha_cita: datos.fecha, sede: datos.sede\n    } }];\n  }\n  delete store.agendar[chatId];\n  return R('Cita cancelada. Escribe 3 si quieres agendar de nuevo. 🐾');\n}\ndelete store.agendar[chatId];\nreturn R('Reiniciemos. Escribe 3 para agendar tu cita.');"
+      },
+      "id": "code-agendar",
+      "name": "Code Agendar",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -820,
+        780
+      ]
+    },
+    {
+      "parameters": {
+        "rules": {
+          "values": [
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": false,
+                  "leftValue": "",
+                  "typeValidation": "loose",
+                  "version": 1
+                },
+                "conditions": [
+                  {
+                    "id": "ac1",
+                    "leftValue": "={{ $json.accion }}",
+                    "rightValue": "responder",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "responder"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": false,
+                  "leftValue": "",
+                  "typeValidation": "loose",
+                  "version": 1
+                },
+                "conditions": [
+                  {
+                    "id": "ac2",
+                    "leftValue": "={{ $json.accion }}",
+                    "rightValue": "slots",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "slots"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": false,
+                  "leftValue": "",
+                  "typeValidation": "loose",
+                  "version": 1
+                },
+                "conditions": [
+                  {
+                    "id": "ac3",
+                    "leftValue": "={{ $json.accion }}",
+                    "rightValue": "crear",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "crear"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": false,
+                  "leftValue": "",
+                  "typeValidation": "loose",
+                  "version": 1
+                },
+                "conditions": [
+                  {
+                    "id": "ac4",
+                    "leftValue": "={{ $json.accion }}",
+                    "rightValue": "ver",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "ver"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": false,
+                  "leftValue": "",
+                  "typeValidation": "loose",
+                  "version": 1
+                },
+                "conditions": [
+                  {
+                    "id": "ac5",
+                    "leftValue": "={{ $json.accion }}",
+                    "rightValue": "reprog_listar",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "reprog_listar"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": false,
+                  "leftValue": "",
+                  "typeValidation": "loose",
+                  "version": 1
+                },
+                "conditions": [
+                  {
+                    "id": "ac6",
+                    "leftValue": "={{ $json.accion }}",
+                    "rightValue": "reprogramar",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "reprogramar"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": false,
+                  "leftValue": "",
+                  "typeValidation": "loose",
+                  "version": 1
+                },
+                "conditions": [
+                  {
+                    "id": "ac7",
+                    "leftValue": "={{ $json.accion }}",
+                    "rightValue": "menu",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "menu"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": false,
+                  "leftValue": "",
+                  "typeValidation": "loose",
+                  "version": 1
+                },
+                "conditions": [
+                  {
+                    "id": "ac8",
+                    "leftValue": "={{ $json.accion }}",
+                    "rightValue": "cancel_listar",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "cancel_listar"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": false,
+                  "leftValue": "",
+                  "typeValidation": "loose",
+                  "version": 1
+                },
+                "conditions": [
+                  {
+                    "id": "ac9",
+                    "leftValue": "={{ $json.accion }}",
+                    "rightValue": "cancelar",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "cancelar"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": false,
+                  "leftValue": "",
+                  "typeValidation": "loose",
+                  "version": 1
+                },
+                "conditions": [
+                  {
+                    "id": "ac10",
+                    "leftValue": "={{ $json.accion }}",
+                    "rightValue": "guardar_encuesta",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "guardar_encuesta"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "switch-accion",
+      "name": "Switch Accion",
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 3,
+      "position": [
+        -620,
+        780
+      ]
+    },
+    {
+      "parameters": {
+        "operation": "getAll",
+        "calendar": {
+          "__rl": true,
+          "value": "={{ $json.calId }}",
+          "mode": "id"
+        },
+        "returnAll": true,
+        "options": {
+          "timeMin": "={{ $json.timeMin }}",
+          "timeMax": "={{ $json.timeMax }}",
+          "singleEvents": true,
+          "orderBy": "startTime"
+        }
+      },
+      "id": "gcal-listar",
+      "name": "GCal Listar Slots",
+      "type": "n8n-nodes-base.googleCalendar",
+      "typeVersion": 1.3,
+      "position": [
+        -420,
+        880
+      ],
+      "alwaysOutputData": true,
+      "onError": "continueRegularOutput",
+      "credentials": {
+        "googleCalendarOAuth2Api": {
+          "id": "B8zSnf9T4rDsiHwt",
+          "name": "Google Calendar dacavet"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "const ev = $('Extraer Variables').first().json;\nconst chatId = String(ev.chatId || '');\nconst store = $getWorkflowStaticData('global');\nstore.agendar = store.agendar || {};\nconst st = store.agendar[chatId];\nif (!st || !st.datos) return [{ json: { textoFinal: 'Tu sesión expiró. Escribe 3 para agendar de nuevo. 🐾' } }];\nconst fecha = st.datos.fecha;\nconst pad = n => String(n).padStart(2, '0');\nconst SLOT = 40, OPEN = 8 * 60, CLOSE = 21 * 60;\nconst eventos = ($('GCal Listar Slots').all() || []).map(i => i.json).filter(e => e && e.start);\nconst ocup = [];\nfor (const e of eventos) {\n  const s = e.start && e.start.dateTime; const en = e.end && e.end.dateTime;\n  if (!s) continue;\n  const sb = new Date(new Date(s).getTime() - 5 * 3600000);\n  const eb = new Date(new Date(en || s).getTime() - 5 * 3600000);\n  const ymd = sb.getUTCFullYear() + '-' + pad(sb.getUTCMonth() + 1) + '-' + pad(sb.getUTCDate());\n  if (ymd !== fecha) continue;\n  ocup.push([sb.getUTCHours() * 60 + sb.getUTCMinutes(), eb.getUTCHours() * 60 + eb.getUTCMinutes()]);\n}\nconst now = new Date(Date.now() - 5 * 3600000);\nconst todayYmd = now.getUTCFullYear() + '-' + pad(now.getUTCMonth() + 1) + '-' + pad(now.getUTCDate());\nconst nowMin = now.getUTCHours() * 60 + now.getUTCMinutes();\nconst fmt = m => pad(Math.floor(m / 60)) + ':' + pad(m % 60);\nconst fmt12 = m => { let h = Math.floor(m / 60); const mm = m % 60; const ap = h >= 12 ? 'PM' : 'AM'; let hh = h % 12; if (hh === 0) hh = 12; return hh + ':' + pad(mm) + ' ' + ap; };\nconst libres = [];\nfor (let m = OPEN; m + SLOT <= CLOSE; m += SLOT) {\n  if (fecha === todayYmd && m < nowMin + 30) continue;\n  let choca = false;\n  for (const o of ocup) { if (m < o[1] && (m + SLOT) > o[0]) { choca = true; break; } }\n  if (!choca) libres.push(m);\n}\nconst allSlots = libres.map(m => ({ hora: fmt(m), min: m, startISO: fecha + 'T' + fmt(m) + ':00-05:00', endISO: fecha + 'T' + fmt(m + SLOT) + ':00-05:00' }));\nconst PER = 8;\nlet page = st.slotPage || 0;\nif (page * PER >= allSlots.length) page = 0;\nconst pageSlots = allSlots.slice(page * PER, page * PER + PER);\nst.slots = pageSlots; st.slotsAll = allSlots; st.slotPage = page;\nstore.agendar[chatId] = st;\nlet txt;\nif (!allSlots.length) {\n  st.paso = 'dia';\n  txt = '😔 No hay horarios disponibles para ' + st.datos.fechaTxt + '. Escribe el número de otro día, o 0 para salir.';\n} else {\n  txt = '🕐 Horarios disponibles para ' + st.datos.fechaTxt + ' (cada cita dura 40 min):\\n\\n';\n  pageSlots.forEach((s, i) => { txt += (i + 1) + '. ' + fmt12(s.min) + '\\n'; });\n  if (page * PER + PER < allSlots.length) txt += (pageSlots.length + 1) + '. ➕ Ver más horarios\\n';\n  txt += '\\nEscribe el número del horario (0 para salir).';\n}\nreturn [{ json: { textoFinal: txt } }];"
+      },
+      "id": "code-slots",
+      "name": "Code Slots",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -220,
+        880
+      ]
+    },
+    {
+      "parameters": {
+        "calendar": {
+          "__rl": true,
+          "value": "={{ $json.calId }}",
+          "mode": "id"
+        },
+        "start": "={{ $json.startISO }}",
+        "end": "={{ $json.endISO }}",
+        "additionalFields": {
+          "summary": "={{ $json.summary }}",
+          "description": "={{ $json.description }}"
+        }
+      },
+      "id": "gcal-crear",
+      "name": "GCal Crear Cita",
+      "type": "n8n-nodes-base.googleCalendar",
+      "typeVersion": 1.3,
+      "position": [
+        -420,
+        1060
+      ],
+      "credentials": {
+        "googleCalendarOAuth2Api": {
+          "id": "B8zSnf9T4rDsiHwt",
+          "name": "Google Calendar dacavet"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "const a = $('Code Agendar').first().json;\nconst ev = $json || {};\nconst pad = n => String(n).padStart(2, '0');\nconst eventId = String(ev.id || ev.iCalUID || '');\nlet fecha_cita = a.fecha_cita || '';\nlet hora_cita = a.hora_cita || '';\nconst startStr = (ev.start && (ev.start.dateTime || ev.start.date)) || '';\nif (startStr) {\n  const sb = new Date(new Date(startStr).getTime() - 5 * 3600000);\n  if (!isNaN(sb.getTime())) {\n    fecha_cita = sb.getUTCFullYear() + '-' + pad(sb.getUTCMonth() + 1) + '-' + pad(sb.getUTCDate());\n    hora_cita = pad(sb.getUTCHours()) + ':' + pad(sb.getUTCMinutes());\n  }\n}\nconst store = $getWorkflowStaticData('global');\nif (a.chatId) { store.agendar = store.agendar || {}; store.agendar[a.chatId] = { paso: 'submenu', datos: {} }; }\n{ store.conv = store.conv || {}; const __cid = a.chatId; let __c = store.conv[__cid] || { chatId: __cid, nombre: a.nombre, firstMs: Date.now(), freeTexts: [], opciones: [] }; __c.opciones = __c.opciones || []; if (!__c.opciones.includes('Agendó una cita')) __c.opciones.push('Agendó una cita'); __c.lastMs = Date.now(); store.conv[__cid] = __c; }\nconst b = new Date(Date.now() - 5 * 3600000);\nconst ts = b.getUTCFullYear() + '-' + pad(b.getUTCMonth() + 1) + '-' + pad(b.getUTCDate()) + ' ' + pad(b.getUTCHours()) + ':' + pad(b.getUTCMinutes()) + ':' + pad(b.getUTCSeconds());\nlet __avF = '';\nif (a.startISO) { const __mf = Math.round((new Date(a.startISO).getTime() - Date.now()) / 60000); if (__mf > 0 && __mf < 60) __avF = '\\n\\n⚠️ ¡Atención! Tu cita es muy pronto, en ' + __mf + ' minutos. Por favor llega a tiempo 🐾.'; }\nconst textoFinal = '✅ ¡Cita agendada con éxito!\\n\\n🐾 ' + a.mascota + ' (' + a.especie + ')\\n🩺 ' + a.especialidad + '\\n🏥 ' + a.sede + '\\n📅 ' + fecha_cita + ' a las ' + hora_cita + __avF + \"\\n\\n¿Qué deseas hacer?\\n1. Agendar una cita\\n2. Consultar mis citas\\n3. Reprogramar\\n4. Cancelar\\n\\nEscribe el número (0 para volver al menú).\";\nreturn [{ json: {\n  timestamp: ts, event_id: eventId, chatId: a.chatId, nombre: a.nombre, mascota: a.mascota, especie: a.especie,\n  especialidad: a.especialidad, mensaje: a.mensaje, hora_cita, fecha_cita, sede: a.sede, estado: 'pendiente', textoFinal\n} }];"
+      },
+      "id": "code-guardar-cita",
+      "name": "Code Guardar Cita",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -220,
+        1060
+      ]
+    },
+    {
+      "parameters": {
+        "operation": "append",
+        "documentId": {
+          "__rl": true,
+          "value": "1jFygCoys6lPfHi8Ip5owcBGcY3Ls13vFQvJnfIcIly0",
+          "mode": "id"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "Citas",
+          "mode": "name"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "timestamp": "={{ $json.timestamp }}",
+            "event_id ": "={{ $json.event_id }}",
+            "chatId": "={{ $json.chatId }}",
+            "nombre": "={{ $json.nombre }}",
+            "mascota": "={{ $json.mascota }}",
+            "especie": "={{ $json.especie }}",
+            "mensaje": "={{ $json.mensaje }}",
+            "especialidad": "={{ $json.especialidad }}",
+            "hora_cita ": "={{ $json.hora_cita }}",
+            "fecha_cita ": "={{ $json.fecha_cita }}",
+            "sede": "={{ $json.sede }}",
+            "estado": "={{ $json.estado }}"
+          },
+          "matchingColumns": [],
+          "schema": []
+        },
+        "options": {}
+      },
+      "id": "guardar-cita",
+      "name": "Sheets Guardar Cita",
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.5,
+      "position": [
+        -20,
+        1060
+      ],
+      "alwaysOutputData": true,
+      "onError": "continueRegularOutput",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "jGJOqR9SAx3N3hxy",
+          "name": "Google Sheets dacavet"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "chatId": "={{ $('Extraer Variables').item.json.chatId }}",
+        "text": "={{ $('Code Guardar Cita').item.json.textoFinal }}",
+        "additionalFields": {
+          "appendAttribution": false,
+          "parse_mode": "HTML"
+        }
+      },
+      "id": "tg-confirmar-cita",
+      "name": "Telegram Confirmar Cita",
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        180,
+        1060
+      ],
+      "webhookId": "dacavet-confirmar-cita-v2",
+      "credentials": {
+        "telegramApi": {
+          "id": "XLzbjAEEhE5jgsYe",
+          "name": "Telegram account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "documentId": {
+          "__rl": true,
+          "value": "1jFygCoys6lPfHi8Ip5owcBGcY3Ls13vFQvJnfIcIly0",
+          "mode": "id"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "Citas",
+          "mode": "name"
+        },
+        "options": {}
+      },
+      "id": "leer-citas-user",
+      "name": "Leer Citas Usuario",
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.5,
+      "position": [
+        -420,
+        1240
+      ],
+      "alwaysOutputData": true,
+      "onError": "continueRegularOutput",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "jGJOqR9SAx3N3hxy",
+          "name": "Google Sheets dacavet"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "const ev = $('Extraer Variables').first().json;\nconst chatId = String(ev.chatId || '');\nconst store = $getWorkflowStaticData('global');\nstore.agendar = store.agendar || {};\nconst val = (f, name) => { for (const k of Object.keys(f)) { if (k.trim() === name) return f[k]; } return ''; };\nconst pad = n => String(n).padStart(2, '0');\nconst now = new Date(Date.now() - 5 * 3600000);\nconst todayYmd = now.getUTCFullYear() + '-' + pad(now.getUTCMonth() + 1) + '-' + pad(now.getUTCDate());\nconst filas = ($('Leer Citas Usuario').all() || []).map(i => i.json).filter(f => {\n  if (!f) return false;\n  if (String(val(f, 'chatId')) !== chatId) return false;\n  if (String(val(f, 'estado')).toLowerCase().indexOf('pendiente') < 0) return false;\n  const fecha = String(val(f, 'fecha_cita')).trim();\n  if (!/^\\d{4}-\\d{2}-\\d{2}$/.test(fecha)) return false;\n  return fecha >= todayYmd;\n});\nfilas.sort((a, b) => {\n  const ka = String(val(a, 'fecha_cita')) + ' ' + String(val(a, 'hora_cita'));\n  const kb = String(val(b, 'fecha_cita')) + ' ' + String(val(b, 'hora_cita'));\n  return ka < kb ? -1 : (ka > kb ? 1 : 0);\n});\nstore.agendar[chatId] = { paso: 'submenu', datos: {} };\n{ store.conv = store.conv || {}; const __cid = chatId; let __c = store.conv[__cid] || { chatId: __cid, nombre: '', firstMs: Date.now(), freeTexts: [], opciones: [] }; __c.opciones = __c.opciones || []; if (!__c.opciones.includes('Consultó sus citas')) __c.opciones.push('Consultó sus citas'); __c.lastMs = Date.now(); store.conv[__cid] = __c; }\nlet txt;\nif (!filas.length) {\n  txt = '📭 No tienes citas vigentes en este momento.\\n\\n💡 ¿Quieres agendar una cita nueva? Marca 1.';\n} else {\n  txt = '📅 Tus citas agendadas:\\n\\n';\n  filas.forEach((f, i) => {\n    const mascota = val(f, 'mascota'); const especie = val(f, 'especie');\n    const esp = val(f, 'especialidad'); const fecha = val(f, 'fecha_cita');\n    const hora = val(f, 'hora_cita'); const sede = val(f, 'sede');\n    txt += (i + 1) + '. 🐾 ' + mascota + (especie ? ' (' + especie + ')' : '') + '\\n   🩺 ' + esp + '\\n   📅 ' + fecha + ' a las ' + hora + '\\n   🏥 ' + sede + '\\n\\n';\n  });\n}\ntxt += \"\\n\\n¿Qué deseas hacer?\\n1. Agendar una cita\\n2. Consultar mis citas\\n3. Reprogramar\\n4. Cancelar\\n\\nEscribe el número (0 para volver al menú).\";\nreturn [{ json: { textoFinal: txt } }];"
+      },
+      "id": "code-listar-citas",
+      "name": "Code Listar Citas",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -220,
+        1240
+      ]
+    },
+    {
+      "parameters": {
+        "documentId": {
+          "__rl": true,
+          "value": "1jFygCoys6lPfHi8Ip5owcBGcY3Ls13vFQvJnfIcIly0",
+          "mode": "id"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "Citas",
+          "mode": "name"
+        },
+        "options": {}
+      },
+      "id": "leer-citas-reprog",
+      "name": "Leer Citas Reprog",
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.5,
+      "position": [
+        -420,
+        1420
+      ],
+      "alwaysOutputData": true,
+      "onError": "continueRegularOutput",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "jGJOqR9SAx3N3hxy",
+          "name": "Google Sheets dacavet"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "const ev = $('Extraer Variables').first().json;\nconst chatId = String(ev.chatId || '');\nconst store = $getWorkflowStaticData('global');\nstore.agendar = store.agendar || {};\nlet st = store.agendar[chatId] || { paso: 'submenu', datos: {} };\nif (!st.datos) st.datos = {};\nconst val = (f, name) => { for (const k of Object.keys(f)) { if (k.trim() === name) return f[k]; } return ''; };\nconst pad = n => String(n).padStart(2, '0');\nconst now = new Date(Date.now() - 5 * 3600000);\nconst todayYmd = now.getUTCFullYear() + '-' + pad(now.getUTCMonth() + 1) + '-' + pad(now.getUTCDate());\nconst CAL = { 'Sede 1': '76224551305cf247fb1fac39416e191f3d89d01b7dee161bcbd902be1b1de0a1@group.calendar.google.com', 'Sede 2': 'a8e971b77565b2856eee7cece902e672f359ef5eb3f30f84c02a721849960309@group.calendar.google.com' };\nconst filas = ($('Leer Citas Reprog').all() || []).map(i => i.json).filter(f => {\n  if (!f) return false;\n  if (String(val(f, 'chatId')) !== chatId) return false;\n  if (String(val(f, 'estado')).toLowerCase().indexOf('pendiente') < 0) return false;\n  const fecha = String(val(f, 'fecha_cita')).trim();\n  if (!/^\\d{4}-\\d{2}-\\d{2}$/.test(fecha)) return false;\n  return fecha >= todayYmd;\n});\nfilas.sort((a, b) => {\n  const ka = String(val(a, 'fecha_cita')) + ' ' + String(val(a, 'hora_cita'));\n  const kb = String(val(b, 'fecha_cita')) + ' ' + String(val(b, 'hora_cita'));\n  return ka < kb ? -1 : (ka > kb ? 1 : 0);\n});\nif (!filas.length) {\n  store.agendar[chatId] = { paso: 'submenu', datos: {} };\n  return [{ json: { textoFinal: '📭 No tienes citas vigentes para reprogramar.\\n\\n💡 ¿Quieres agendar una cita nueva? Marca 1.\\n\\n¿Qué deseas hacer?\\n1. Agendar una cita\\n2. Consultar mis citas\\n3. Reprogramar\\n4. Cancelar\\n\\nEscribe el número (0 para volver al menú).' } }];\n}\nst.lista = filas.map(f => ({\n  event_id: String(val(f, 'event_id')), sede: String(val(f, 'sede')), calId: CAL[String(val(f, 'sede'))] || '',\n  mascota: String(val(f, 'mascota')), especie: String(val(f, 'especie')), especialidad: String(val(f, 'especialidad')),\n  fecha: String(val(f, 'fecha_cita')), hora: String(val(f, 'hora_cita'))\n}));\nst.modo = 'reprog'; st.paso = 'reprog_elegir';\nstore.agendar[chatId] = st;\nlet txt = '🔄 ¿Cuál cita quieres reprogramar?\\n\\n';\nst.lista.forEach((c, i) => { txt += (i + 1) + '. 🐾 ' + c.mascota + (c.especie ? ' (' + c.especie + ')' : '') + ' — ' + c.especialidad + '\\n   📅 ' + c.fecha + ' a las ' + c.hora + ' — 🏥 ' + c.sede + '\\n\\n'; });\ntxt += 'Escribe el número de la cita (0 para salir).';\nreturn [{ json: { textoFinal: txt } }];"
+      },
+      "id": "code-reprog-listar",
+      "name": "Code Reprog Listar",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -220,
+        1420
+      ]
+    },
+    {
+      "parameters": {
+        "operation": "update",
+        "calendar": {
+          "__rl": true,
+          "value": "={{ $json.calId }}",
+          "mode": "id"
+        },
+        "eventId": "={{ $json.event_id }}",
+        "updateFields": {
+          "start": "={{ $json.startISO }}",
+          "end": "={{ $json.endISO }}"
+        }
+      },
+      "id": "gcal-reprog",
+      "name": "GCal Reprogramar",
+      "type": "n8n-nodes-base.googleCalendar",
+      "typeVersion": 1.3,
+      "position": [
+        -420,
+        1600
+      ],
+      "credentials": {
+        "googleCalendarOAuth2Api": {
+          "id": "B8zSnf9T4rDsiHwt",
+          "name": "Google Calendar dacavet"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "const a = $('Code Agendar').first().json;\nconst ev = $json || {};\nconst pad = n => String(n).padStart(2, '0');\nlet fecha_cita = a.fecha_cita || ''; let hora_cita = a.hora_cita || '';\nconst startStr = (ev.start && (ev.start.dateTime || ev.start.date)) || '';\nif (startStr) {\n  const sb = new Date(new Date(startStr).getTime() - 5 * 3600000);\n  if (!isNaN(sb.getTime())) {\n    fecha_cita = sb.getUTCFullYear() + '-' + pad(sb.getUTCMonth() + 1) + '-' + pad(sb.getUTCDate());\n    hora_cita = pad(sb.getUTCHours()) + ':' + pad(sb.getUTCMinutes());\n  }\n}\nconst store = $getWorkflowStaticData('global');\nif (a.chatId) { store.agendar = store.agendar || {}; store.agendar[a.chatId] = { paso: 'submenu', datos: {} }; }\n{ store.conv = store.conv || {}; const __cid = a.chatId; let __c = store.conv[__cid] || { chatId: __cid, nombre: a.nombre, firstMs: Date.now(), freeTexts: [], opciones: [] }; __c.opciones = __c.opciones || []; if (!__c.opciones.includes('Reprogramó una cita')) __c.opciones.push('Reprogramó una cita'); __c.lastMs = Date.now(); store.conv[__cid] = __c; }\nconst textoFinal = '✅ ¡Cita reprogramada!\\n\\n🐾 ' + a.mascota + ' (' + a.especie + ')\\n🩺 ' + a.especialidad + '\\n🏥 ' + a.sede + '\\n📅 Nueva fecha: ' + fecha_cita + ' a las ' + hora_cita + \"\\n\\n¿Qué deseas hacer?\\n1. Agendar una cita\\n2. Consultar mis citas\\n3. Reprogramar\\n4. Cancelar\\n\\nEscribe el número (0 para volver al menú).\";\nreturn [{ json: { event_id: String(a.event_id), hora_cita, fecha_cita, recordatorio: '', textoFinal } }];"
+      },
+      "id": "code-guardar-reprog",
+      "name": "Code Guardar Reprog",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -220,
+        1600
+      ]
+    },
+    {
+      "parameters": {
+        "operation": "update",
+        "documentId": {
+          "__rl": true,
+          "value": "1jFygCoys6lPfHi8Ip5owcBGcY3Ls13vFQvJnfIcIly0",
+          "mode": "id"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "Citas",
+          "mode": "name"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "event_id ": "={{ $json.event_id }}",
+            "hora_cita ": "={{ $json.hora_cita }}",
+            "fecha_cita ": "={{ $json.fecha_cita }}",
+            "recordatorio": "={{ $json.recordatorio }}"
+          },
+          "matchingColumns": [
+            "event_id "
+          ],
+          "schema": []
+        },
+        "options": {}
+      },
+      "id": "actualizar-cita",
+      "name": "Sheets Actualizar Cita",
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.5,
+      "position": [
+        -20,
+        1600
+      ],
+      "alwaysOutputData": true,
+      "onError": "continueRegularOutput",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "jGJOqR9SAx3N3hxy",
+          "name": "Google Sheets dacavet"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "chatId": "={{ $('Extraer Variables').item.json.chatId }}",
+        "text": "={{ $('Code Guardar Reprog').item.json.textoFinal }}",
+        "additionalFields": {
+          "appendAttribution": false,
+          "parse_mode": "HTML"
+        }
+      },
+      "id": "tg-confirmar-reprog",
+      "name": "Telegram Confirmar Reprog",
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        180,
+        1600
+      ],
+      "webhookId": "dacavet-confirmar-reprog-v2",
+      "credentials": {
+        "telegramApi": {
+          "id": "XLzbjAEEhE5jgsYe",
+          "name": "Telegram account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "documentId": {
+          "__rl": true,
+          "value": "1jFygCoys6lPfHi8Ip5owcBGcY3Ls13vFQvJnfIcIly0",
+          "mode": "id"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "Citas",
+          "mode": "name"
+        },
+        "options": {}
+      },
+      "id": "leer-citas-cancel",
+      "name": "Leer Citas Cancel",
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.5,
+      "position": [
+        -420,
+        1780
+      ],
+      "alwaysOutputData": true,
+      "onError": "continueRegularOutput",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "jGJOqR9SAx3N3hxy",
+          "name": "Google Sheets dacavet"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "const ev = $('Extraer Variables').first().json;\nconst chatId = String(ev.chatId || '');\nconst store = $getWorkflowStaticData('global');\nstore.agendar = store.agendar || {};\nlet st = store.agendar[chatId] || { paso: 'submenu', datos: {} };\nif (!st.datos) st.datos = {};\nconst val = (f, name) => { for (const k of Object.keys(f)) { if (k.trim() === name) return f[k]; } return ''; };\nconst pad = n => String(n).padStart(2, '0');\nconst now = new Date(Date.now() - 5 * 3600000);\nconst todayYmd = now.getUTCFullYear() + '-' + pad(now.getUTCMonth() + 1) + '-' + pad(now.getUTCDate());\nconst CAL = { 'Sede 1': '76224551305cf247fb1fac39416e191f3d89d01b7dee161bcbd902be1b1de0a1@group.calendar.google.com', 'Sede 2': 'a8e971b77565b2856eee7cece902e672f359ef5eb3f30f84c02a721849960309@group.calendar.google.com' };\nconst filas = ($('Leer Citas Cancel').all() || []).map(i => i.json).filter(f => {\n  if (!f) return false;\n  if (String(val(f, 'chatId')) !== chatId) return false;\n  if (String(val(f, 'estado')).toLowerCase().indexOf('pendiente') < 0) return false;\n  const fecha = String(val(f, 'fecha_cita')).trim();\n  if (!/^\\d{4}-\\d{2}-\\d{2}$/.test(fecha)) return false;\n  return fecha >= todayYmd;\n});\nfilas.sort((a, b) => {\n  const ka = String(val(a, 'fecha_cita')) + ' ' + String(val(a, 'hora_cita'));\n  const kb = String(val(b, 'fecha_cita')) + ' ' + String(val(b, 'hora_cita'));\n  return ka < kb ? -1 : (ka > kb ? 1 : 0);\n});\nif (!filas.length) {\n  store.agendar[chatId] = { paso: 'submenu', datos: {} };\n  return [{ json: { textoFinal: '📭 No tienes citas vigentes para cancelar.\\n\\n💡 ¿Quieres agendar una cita nueva? Marca 1.' + \"\\n\\n¿Qué deseas hacer?\\n1. Agendar una cita\\n2. Consultar mis citas\\n3. Reprogramar\\n4. Cancelar\\n\\nEscribe el número (0 para volver al menú).\" } }];\n}\nst.lista = filas.map(f => ({\n  event_id: String(val(f, 'event_id')), sede: String(val(f, 'sede')), calId: CAL[String(val(f, 'sede'))] || '',\n  mascota: String(val(f, 'mascota')), especie: String(val(f, 'especie')), especialidad: String(val(f, 'especialidad')),\n  fecha: String(val(f, 'fecha_cita')), hora: String(val(f, 'hora_cita'))\n}));\nst.modo = 'cancel'; st.paso = 'cancel_elegir';\nstore.agendar[chatId] = st;\nlet txt = '❌ ¿Cuál cita quieres cancelar?\\n\\n';\nst.lista.forEach((c, i) => { txt += (i + 1) + '. 🐾 ' + c.mascota + (c.especie ? ' (' + c.especie + ')' : '') + ' — ' + c.especialidad + '\\n   📅 ' + c.fecha + ' a las ' + c.hora + ' — 🏥 ' + c.sede + '\\n\\n'; });\ntxt += 'Escribe el número de la cita (0 para salir).';\nreturn [{ json: { textoFinal: txt } }];"
+      },
+      "id": "code-cancel-listar",
+      "name": "Code Cancel Listar",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -220,
+        1780
+      ]
+    },
+    {
+      "parameters": {
+        "operation": "delete",
+        "calendar": {
+          "__rl": true,
+          "value": "={{ $json.calId }}",
+          "mode": "id"
+        },
+        "eventId": "={{ $json.event_id }}",
+        "options": {}
+      },
+      "id": "gcal-cancelar",
+      "name": "GCal Cancelar",
+      "type": "n8n-nodes-base.googleCalendar",
+      "typeVersion": 1.3,
+      "position": [
+        -420,
+        1960
+      ],
+      "alwaysOutputData": true,
+      "onError": "continueRegularOutput",
+      "credentials": {
+        "googleCalendarOAuth2Api": {
+          "id": "B8zSnf9T4rDsiHwt",
+          "name": "Google Calendar dacavet"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "const a = $('Code Agendar').first().json;\nconst store = $getWorkflowStaticData('global');\nif (a.chatId) {\n  store.agendar = store.agendar || {}; store.agendar[a.chatId] = { paso: 'submenu', datos: {} };\n  store.conv = store.conv || {};\n  let cc = store.conv[a.chatId] || { chatId: a.chatId, nombre: a.nombre || '', firstMs: Date.now(), freeTexts: [], opciones: [] };\n  cc.opciones = cc.opciones || [];\n  if (!cc.opciones.includes('Canceló una cita')) cc.opciones.push('Canceló una cita');\n  cc.lastMs = Date.now(); store.conv[a.chatId] = cc;\n}\nconst textoFinal = '🗑️ Cita cancelada.\\n\\n🐾 ' + a.mascota + ' (' + a.especie + ')\\n🩺 ' + a.especialidad + '\\n📅 ' + a.fecha_cita + ' a las ' + a.hora_cita + '\\n🏥 ' + a.sede + \"\\n\\n¿Qué deseas hacer?\\n1. Agendar una cita\\n2. Consultar mis citas\\n3. Reprogramar\\n4. Cancelar\\n\\nEscribe el número (0 para volver al menú).\";\nreturn [{ json: { event_id: String(a.event_id), estado: 'cancelada', recordatorio: 'No aplica (cancelada)', textoFinal } }];"
+      },
+      "id": "code-guardar-cancel",
+      "name": "Code Guardar Cancel",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -220,
+        1960
+      ]
+    },
+    {
+      "parameters": {
+        "operation": "update",
+        "documentId": {
+          "__rl": true,
+          "value": "1jFygCoys6lPfHi8Ip5owcBGcY3Ls13vFQvJnfIcIly0",
+          "mode": "id"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "Citas",
+          "mode": "name"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "event_id ": "={{ $json.event_id }}",
+            "estado": "={{ $json.estado }}",
+            "recordatorio": "={{ $json.recordatorio }}"
+          },
+          "matchingColumns": [
+            "event_id "
+          ],
+          "schema": []
+        },
+        "options": {}
+      },
+      "id": "actualizar-cancel",
+      "name": "Sheets Actualizar Cancel",
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.5,
+      "position": [
+        -20,
+        1960
+      ],
+      "alwaysOutputData": true,
+      "onError": "continueRegularOutput",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "jGJOqR9SAx3N3hxy",
+          "name": "Google Sheets dacavet"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "chatId": "={{ $('Extraer Variables').item.json.chatId }}",
+        "text": "={{ $('Code Guardar Cancel').item.json.textoFinal }}",
+        "additionalFields": {
+          "appendAttribution": false,
+          "parse_mode": "HTML"
+        }
+      },
+      "id": "tg-confirmar-cancel",
+      "name": "Telegram Confirmar Cancel",
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        180,
+        1960
+      ],
+      "webhookId": "dacavet-confirmar-cancel-v2",
+      "credentials": {
+        "telegramApi": {
+          "id": "XLzbjAEEhE5jgsYe",
+          "name": "Telegram account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "minutes",
+              "minutesInterval": 10
+            }
+          ]
+        }
+      },
+      "id": "sched-recordatorio",
+      "name": "Schedule Recordatorio",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.2,
+      "position": [
+        -1700,
+        1040
+      ]
+    },
+    {
+      "parameters": {
+        "documentId": {
+          "__rl": true,
+          "value": "1jFygCoys6lPfHi8Ip5owcBGcY3Ls13vFQvJnfIcIly0",
+          "mode": "id"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "Citas",
+          "mode": "name"
+        },
+        "options": {}
+      },
+      "id": "leer-citas-rec",
+      "name": "Leer Citas Recordatorio",
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.5,
+      "position": [
+        -1480,
+        1040
+      ],
+      "alwaysOutputData": true,
+      "onError": "continueRegularOutput",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "jGJOqR9SAx3N3hxy",
+          "name": "Google Sheets dacavet"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "const val = (f, name) => { for (const k of Object.keys(f)) { if (k.trim() === name) return f[k]; } return ''; };\nconst pad = n => String(n).padStart(2, '0');\nconst nowMs = Date.now();\nconst nowB = new Date(nowMs - 5 * 3600000);\nconst tsNow = nowB.getUTCFullYear() + '-' + pad(nowB.getUTCMonth() + 1) + '-' + pad(nowB.getUTCDate()) + ' ' + pad(nowB.getUTCHours()) + ':' + pad(nowB.getUTCMinutes());\nconst filas = ($('Leer Citas Recordatorio').all() || []).map(i => i.json).filter(f => f && typeof f === 'object');\nconst store = $getWorkflowStaticData('global');\nstore.recordatorioPend = store.recordatorioPend || {};\nconst out = [];\nfor (const f of filas) {\n  if (String(val(f, 'estado')).toLowerCase().indexOf('pendiente') < 0) continue;\n  if (String(val(f, 'recordatorio')).trim()) continue; // ya recordada\n  const fecha = String(val(f, 'fecha_cita')).trim();\n  const hora = String(val(f, 'hora_cita')).trim() || '00:00';\n  if (!/^\\d{4}-\\d{2}-\\d{2}$/.test(fecha)) continue;\n  const citaMs = new Date(fecha + 'T' + hora + ':00-05:00').getTime();\n  if (isNaN(citaMs)) continue;\n  const diff = citaMs - nowMs;\n  if (diff <= 0 || diff > 24 * 3600000) continue; // solo próximas 24h, no pasadas\n  const chatId = String(val(f, 'chatId'));\n  const event_id = String(val(f, 'event_id'));\n  if (!chatId || !event_id) continue;\n  const mascota = String(val(f, 'mascota'));\n  const especie = String(val(f, 'especie'));\n  const especialidad = String(val(f, 'especialidad'));\n  const sede = String(val(f, 'sede'));\n  const textoFinal = '🔔 Recordatorio de tu cita en Agente Veterinario\\n\\n🐾 ' + mascota + (especie ? ' (' + especie + ')' : '') + '\\n📅 ' + fecha + ' a las ' + hora + '\\n🏥 ' + sede + '\\n\\n¿Confirmas tu asistencia?\\nResponde SI para confirmar o CANCELAR si no podrás asistir.';\n  store.recordatorioPend[chatId] = { event_id, mascota, especie, especialidad, sede, fecha, hora };\n  out.push({ json: { chatId, textoFinal, event_id, recordatorio: tsNow } });\n}\nreturn out;"
+      },
+      "id": "code-recordatorio",
+      "name": "Code Recordatorio",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -1260,
+        1040
+      ]
+    },
+    {
+      "parameters": {
+        "chatId": "={{ $json.chatId }}",
+        "text": "={{ $json.textoFinal }}",
+        "additionalFields": {
+          "appendAttribution": false,
+          "parse_mode": "HTML"
+        }
+      },
+      "id": "tg-recordatorio",
+      "name": "Telegram Recordatorio",
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        -1040,
+        960
+      ],
+      "webhookId": "dacavet-recordatorio-v2",
+      "credentials": {
+        "telegramApi": {
+          "id": "XLzbjAEEhE5jgsYe",
+          "name": "Telegram account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "update",
+        "documentId": {
+          "__rl": true,
+          "value": "1jFygCoys6lPfHi8Ip5owcBGcY3Ls13vFQvJnfIcIly0",
+          "mode": "id"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "Citas",
+          "mode": "name"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "event_id ": "={{ $json.event_id }}",
+            "recordatorio": "={{ $json.recordatorio }}"
+          },
+          "matchingColumns": [
+            "event_id "
+          ],
+          "schema": []
+        },
+        "options": {}
+      },
+      "id": "marcar-rec",
+      "name": "Sheets Marcar Recordatorio",
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.5,
+      "position": [
+        -1040,
+        1120
+      ],
+      "alwaysOutputData": true,
+      "onError": "continueRegularOutput",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "jGJOqR9SAx3N3hxy",
+          "name": "Google Sheets dacavet"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "minutes",
+              "minutesInterval": 10
+            }
+          ]
+        }
+      },
+      "id": "sched-seg",
+      "name": "Schedule Seguimiento",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.2,
+      "position": [
+        -1700,
+        1320
+      ]
+    },
+    {
+      "parameters": {
+        "documentId": {
+          "__rl": true,
+          "value": "1jFygCoys6lPfHi8Ip5owcBGcY3Ls13vFQvJnfIcIly0",
+          "mode": "id"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "Citas",
+          "mode": "name"
+        },
+        "options": {}
+      },
+      "id": "leer-citas-seg",
+      "name": "Leer Citas Seguimiento",
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.5,
+      "position": [
+        -1480,
+        1320
+      ],
+      "alwaysOutputData": true,
+      "onError": "continueRegularOutput",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "jGJOqR9SAx3N3hxy",
+          "name": "Google Sheets dacavet"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "const val = (f, name) => { for (const k of Object.keys(f)) { if (k.trim() === name) return f[k]; } return ''; };\nconst nowMs = Date.now();\nconst store = $getWorkflowStaticData('global');\nstore.seguimiento = store.seguimiento || { lista: [] };\nconst lista = store.seguimiento.lista;\nconst enLista = new Set(lista.map(x => x.event_id));\nconst filas = ($('Leer Citas Seguimiento').all() || []).map(i => i.json).filter(f => f && typeof f === 'object');\nlet nuevos = 0;\nfor (const f of filas) {\n  if (String(val(f, 'estado')).toLowerCase().indexOf('pendiente') < 0) continue;\n  const event_id = String(val(f, 'event_id'));\n  if (!event_id || enLista.has(event_id)) continue;\n  const fecha = String(val(f, 'fecha_cita')).trim();\n  const hora = String(val(f, 'hora_cita')).trim() || '00:00';\n  if (!/^\\d{4}-\\d{2}-\\d{2}$/.test(fecha)) continue;\n  const citaMs = new Date(fecha + 'T' + hora + ':00-05:00').getTime();\n  if (isNaN(citaMs)) continue;\n  if (nowMs - citaMs < 3600000) continue; // aún no pasa 1h desde la cita\n  lista.push({ event_id, chatId: String(val(f, 'chatId')), nombre: String(val(f, 'nombre')), mascota: String(val(f, 'mascota')), especie: String(val(f, 'especie')), especialidad: String(val(f, 'especialidad')), sede: String(val(f, 'sede')), fecha, hora });\n  enLista.add(event_id); nuevos++;\n}\nstore.seguimiento.lista = lista;\nif (!nuevos || !lista.length) return [];\nlet txt = '📋 Confirmación de asistencia — Agente Veterinario\\n\\n¿El cliente asistió a su cita?\\n\\n';\nlista.forEach((c, i) => { txt += (i + 1) + '. ' + c.nombre + ' — ' + c.mascota + ' (' + c.especialidad + ')\\n   📅 ' + c.fecha + ' ' + c.hora + ' — 🏥 ' + c.sede + '\\n\\n'; });\ntxt += 'Responde: [número] si (asistió)  ó  [número] no (no asistió).\\nEjemplo: 1 si';\nreturn [{ json: { asesorChatId: '5050987637', textoFinal: txt } }];"
+      },
+      "id": "code-seg-preguntar",
+      "name": "Code Seguimiento Preguntar",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -1260,
+        1320
+      ]
+    },
+    {
+      "parameters": {
+        "chatId": "={{ $json.asesorChatId }}",
+        "text": "={{ $json.textoFinal }}",
+        "additionalFields": {
+          "appendAttribution": false,
+          "parse_mode": "HTML"
+        }
+      },
+      "id": "tg-preguntar-asesor",
+      "name": "Telegram Preguntar Asesor",
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        -1040,
+        1320
+      ],
+      "webhookId": "dacavet-preguntar-asesor-v2",
+      "credentials": {
+        "telegramApi": {
+          "id": "XLzbjAEEhE5jgsYe",
+          "name": "Telegram account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "const ev = $('Extraer Variables').first().json;\nconst texto = String(ev.texto || '').trim();\nconst store = $getWorkflowStaticData('global');\nstore.seguimiento = store.seguimiento || { lista: [] };\nconst lista = store.seguimiento.lista;\nconst m = texto.toLowerCase().match(/^(\\d+)\\s+(si|sí|s|no|n)$/i);\nif (!m) return [{ json: { event_id: '', estado: '', textoFinal: 'Formato: [número] si  ó  [número] no. Ejemplo: 1 si' } }];\nconst idx = parseInt(m[1], 10) - 1;\nif (idx < 0 || idx >= lista.length) return [{ json: { event_id: '', estado: '', textoFinal: 'Ese número no está en la lista. Revisa e intenta de nuevo.' } }];\nconst c = lista[idx];\nconst asistio = /^(si|sí|s)$/i.test(m[2]);\nconst estado = asistio ? 'realizada' : 'incumplida';\nlista.splice(idx, 1);\nstore.seguimiento.lista = lista;\nlet textoFinal = '✅ Registrado: ' + c.nombre + ' — ' + c.mascota + ' → ' + estado + '.\\n\\n';\nif (lista.length) {\n  textoFinal += 'Quedan por confirmar:\\n\\n';\n  lista.forEach((x, i) => { textoFinal += (i + 1) + '. ' + x.nombre + ' — ' + x.mascota + ' (' + x.especialidad + ')\\n   📅 ' + x.fecha + ' ' + x.hora + '\\n\\n'; });\n  textoFinal += 'Responde: [número] si / [número] no.';\n} else {\n  textoFinal += 'No quedan citas por confirmar. 🐾';\n}\nreturn [{ json: { event_id: c.event_id, estado, textoFinal, clienteChatId: c.chatId, realizada: asistio, mascota: c.mascota, especie: c.especie, sede: c.sede, nombre: c.nombre } }];"
+      },
+      "id": "code-seg-responder",
+      "name": "Code Seguimiento Responder",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -1020,
+        900
+      ]
+    },
+    {
+      "parameters": {
+        "operation": "update",
+        "documentId": {
+          "__rl": true,
+          "value": "1jFygCoys6lPfHi8Ip5owcBGcY3Ls13vFQvJnfIcIly0",
+          "mode": "id"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "Citas",
+          "mode": "name"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "event_id ": "={{ $json.event_id }}",
+            "estado": "={{ $json.estado }}"
+          },
+          "matchingColumns": [
+            "event_id "
+          ],
+          "schema": []
+        },
+        "options": {}
+      },
+      "id": "actualizar-seg",
+      "name": "Sheets Actualizar Seguimiento",
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.5,
+      "position": [
+        -800,
+        900
+      ],
+      "alwaysOutputData": true,
+      "onError": "continueRegularOutput",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "jGJOqR9SAx3N3hxy",
+          "name": "Google Sheets dacavet"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "chatId": "={{ $('Extraer Variables').item.json.chatId }}",
+        "text": "={{ $('Code Seguimiento Responder').item.json.textoFinal }}",
+        "additionalFields": {
+          "appendAttribution": false,
+          "parse_mode": "HTML"
+        }
+      },
+      "id": "tg-confirmar-asesor",
+      "name": "Telegram Confirmar Asesor",
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        -580,
+        900
+      ],
+      "webhookId": "dacavet-confirmar-asesor-v2",
+      "credentials": {
+        "telegramApi": {
+          "id": "XLzbjAEEhE5jgsYe",
+          "name": "Telegram account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "const r = $json || {};\nif (!r.realizada || !r.clienteChatId || !r.event_id) return [];\nconst store = $getWorkflowStaticData('global');\nstore.encuesta = store.encuesta || {};\nstore.encuesta[r.clienteChatId] = { paso: 'calificacion', datos: { event_id: r.event_id, mascota: r.mascota || '', especie: r.especie || '', sede: r.sede || '', nombre: r.nombre || '' } };\nconst textoFinal = '🐾 ¡Gracias por tu visita a Agente Veterinario!\\n\\n¿Cómo calificarías la atención que recibiste? Responde del 1 al 5 (5 = excelente).';\nreturn [{ json: { clienteChatId: r.clienteChatId, textoFinal } }];"
+      },
+      "id": "code-iniciar-encuesta",
+      "name": "Code Iniciar Encuesta",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -800,
+        760
+      ]
+    },
+    {
+      "parameters": {
+        "chatId": "={{ $json.clienteChatId }}",
+        "text": "={{ $json.textoFinal }}",
+        "additionalFields": {
+          "appendAttribution": false,
+          "parse_mode": "HTML"
+        }
+      },
+      "id": "tg-enviar-encuesta",
+      "name": "Telegram Enviar Encuesta",
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        -580,
+        760
+      ],
+      "webhookId": "dacavet-enviar-encuesta-v2",
+      "credentials": {
+        "telegramApi": {
+          "id": "XLzbjAEEhE5jgsYe",
+          "name": "Telegram account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "const ev = $('Extraer Variables').first().json;\nconst chatId = String(ev.chatId || '');\nconst texto = String(ev.texto || '').trim();\nconst tl = texto.toLowerCase();\nconst store = $getWorkflowStaticData('global');\nstore.encuesta = store.encuesta || {};\nlet st = store.encuesta[chatId];\nif (!st || !st.datos) return [{ json: { accion: 'responder', textoFinal: 'No tienes una encuesta activa. Escribe /start para el menú. 🐾' } }];\nconst datos = st.datos;\nif (st.paso === 'calificacion') {\n  const n = parseInt(texto, 10);\n  if (!n || n < 1 || n > 5) return [{ json: { accion: 'responder', textoFinal: 'Por favor responde con un número del 1 al 5 (5 = excelente). 🐾' } }];\n  datos.calificacion = n; st.paso = 'comentario'; store.encuesta[chatId] = st;\n  return [{ json: { accion: 'responder', textoFinal: 'Gracias 🙏 ¿Quieres dejar un comentario? Escríbelo, o responde \"no\" para omitir.' } }];\n}\nif (st.paso === 'comentario') {\n  let comentario = texto;\n  if (tl === 'no' || tl === '0' || tl === '-' || tl === 'omitir' || tl === 'ninguno') comentario = '';\n  delete store.encuesta[chatId];\n  const pad = n => String(n).padStart(2, '0');\n  const b = new Date(Date.now() - 5 * 3600000);\n  const ts = b.getUTCFullYear() + '-' + pad(b.getUTCMonth() + 1) + '-' + pad(b.getUTCDate()) + ' ' + pad(b.getUTCHours()) + ':' + pad(b.getUTCMinutes()) + ':' + pad(b.getUTCSeconds());\n  const textoFinal = '🐾 ¡Gracias por tu opinión! Registramos tu calificación de ' + datos.calificacion + '/5. ¡Te esperamos pronto!';\n  return [{ json: { accion: 'guardar_encuesta', timestamp: ts, chatId, nombre: datos.nombre || '', mascota: datos.mascota || '', sede: datos.sede || '', calificacion: datos.calificacion, comentario, textoFinal } }];\n}\ndelete store.encuesta[chatId];\nreturn [{ json: { accion: 'responder', textoFinal: 'Encuesta finalizada. 🐾' } }];"
+      },
+      "id": "code-encuesta",
+      "name": "Code Encuesta",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -1020,
+        1180
+      ]
+    },
+    {
+      "parameters": {
+        "operation": "append",
+        "documentId": {
+          "__rl": true,
+          "value": "1jFygCoys6lPfHi8Ip5owcBGcY3Ls13vFQvJnfIcIly0",
+          "mode": "id"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "Encuestas",
+          "mode": "name"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "timestamp": "={{ $json.timestamp }}",
+            "chatId": "={{ $json.chatId }}",
+            "nombre": "={{ $json.nombre }}",
+            "mascota": "={{ $json.mascota }}",
+            "sede": "={{ $json.sede }}",
+            "calificacion": "={{ $json.calificacion }}",
+            "comentario": "={{ $json.comentario }}"
+          },
+          "matchingColumns": [],
+          "schema": []
+        },
+        "options": {}
+      },
+      "id": "guardar-encuesta",
+      "name": "Sheets Guardar Encuesta",
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.5,
+      "position": [
+        -600,
+        1180
+      ],
+      "alwaysOutputData": true,
+      "onError": "continueRegularOutput",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "jGJOqR9SAx3N3hxy",
+          "name": "Google Sheets dacavet"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "chatId": "={{ $('Extraer Variables').item.json.chatId }}",
+        "text": "={{ $('Code Encuesta').item.json.textoFinal }}",
+        "additionalFields": {
+          "appendAttribution": false,
+          "parse_mode": "HTML"
+        }
+      },
+      "id": "tg-confirmar-encuesta",
+      "name": "Telegram Confirmar Encuesta",
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        -380,
+        1180
+      ],
+      "webhookId": "dacavet-confirmar-encuesta-v2",
+      "credentials": {
+        "telegramApi": {
+          "id": "XLzbjAEEhE5jgsYe",
+          "name": "Telegram account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "const ruta = String($json.ruta || '');\nconst MENU = '\\n\\n¿En qué te puedo ayudar? Escribe el número:\\n1. 📋 Servicios\\n2. ❓ Preguntas frecuentes\\n3. 📅 Gestionar mi cita\\n4. 👤 Hablar con un asesor';\nlet textoFinal;\nif (ruta === 'seguridad') {\n  textoFinal = '🔒 Por tu seguridad, NO compartas datos sensibles por aquí (números de tarjeta, contraseñas, claves). Nunca te los pediremos por este chat.' + MENU;\n} else {\n  textoFinal = 'Estoy aquí para ayudarte de la mejor manera 🐾. Cuéntame, ¿qué necesitas?' + MENU;\n}\nreturn [{ json: { textoFinal } }];"
+      },
+      "id": "code-resp-segura",
+      "name": "Code Respuesta Segura",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -1020,
+        1320
+      ]
+    },
+    {
+      "parameters": {
+        "documentId": {
+          "__rl": true,
+          "value": "1jFygCoys6lPfHi8Ip5owcBGcY3Ls13vFQvJnfIcIly0",
+          "mode": "id"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "Faqs",
+          "mode": "name"
+        },
+        "options": {}
+      },
+      "id": "leer-faqs-buscar",
+      "name": "Leer Faqs Buscar",
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.5,
+      "position": [
+        -1020,
+        1440
+      ],
+      "alwaysOutputData": true,
+      "onError": "continueRegularOutput",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "jGJOqR9SAx3N3hxy",
+          "name": "Google Sheets dacavet"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "const ev = $('Extraer Variables').first().json;\nconst norm = s => String(s).toLowerCase().normalize('NFD').replace(/[\\u0300-\\u036f]/g, '').replace(/[^a-z0-9ñ ]/g, ' ').replace(/\\s+/g, ' ').trim();\nconst esc = s => String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');\nconst q = norm(ev.texto || '');\nconst qWords = q.split(' ').filter(w => w.length >= 4);\nconst faqs = ($('Leer Faqs Buscar').all() || []).map(i => i.json).filter(f => f && f.pregunta);\nlet best = null, bestScore = 0;\nfor (const f of faqs) {\n  const fw = norm(String(f.pregunta || '') + ' ' + String(f.respuesta || '')).split(' ').filter(w => w.length >= 4);\n  let score = 0;\n  for (const w of qWords) {\n    for (const x of fw) { if (w === x || w.slice(0, 4) === x.slice(0, 4)) { score++; break; } }\n  }\n  if (score > bestScore) { bestScore = score; best = f; }\n}\nlet textoFinal;\nif (best && bestScore >= 1) {\n  textoFinal = esc(String(best.respuesta || '').trim()) + '\\n\\n¿Quieres agendar una cita? Escribe 3, o 0 para el menú. 🐾';\n} else {\n  textoFinal = 'No estoy seguro de entenderte 🐾, pero con gusto te ayudo. Escribe el número:\\n\\n1. 📋 Servicios\\n2. ❓ Preguntas frecuentes\\n3. 📅 Gestionar mi cita\\n4. 👤 Hablar con un asesor';\n}\nreturn [{ json: { textoFinal } }];"
+      },
+      "id": "code-buscar-faq",
+      "name": "Code Buscar FAQ",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -800,
+        1440
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "const ev = $('Extraer Variables').first().json;\nconst chatId = String(ev.chatId || '');\nconst texto = String(ev.texto || '').trim();\nconst tl = texto.toLowerCase();\nconst store = $getWorkflowStaticData('global');\nstore.recordatorioPend = store.recordatorioPend || {};\nconst pend = store.recordatorioPend[chatId];\nif (!pend) return [{ json: { accion: 'responder', textoFinal: 'Esa confirmación ya no está activa. Escribe 0 para ver el menú. 🐾' } }];\n\nconst CAL = { 'Sede 1': '76224551305cf247fb1fac39416e191f3d89d01b7dee161bcbd902be1b1de0a1@group.calendar.google.com', 'Sede 2': 'a8e971b77565b2856eee7cece902e672f359ef5eb3f30f84c02a721849960309@group.calendar.google.com' };\n\nif (tl === '0' || tl === 'menu' || tl === 'salir') {\n  delete store.recordatorioPend[chatId];\n  return [{ json: { accion: 'responder', textoFinal: 'Listo, no cambié nada de tu cita. Escribe 0 para ver el menú. 🐾' } }];\n}\nif (/^(si|sí|s|confirmar|confirmo|1)$/i.test(tl)) {\n  delete store.recordatorioPend[chatId];\n  return [{ json: { accion: 'responder', textoFinal: '✅ ¡Gracias! Quedó confirmada tu asistencia con ' + pend.mascota + '. ¡Te esperamos! 🐾' } }];\n}\nif (/^(cancelar|cancela|no|n|2)$/i.test(tl)) {\n  delete store.recordatorioPend[chatId];\n  const calId = CAL[pend.sede] || '';\n  return [{ json: {\n    accion: 'cancelar', calId, event_id: pend.event_id, chatId,\n    mascota: pend.mascota, especie: pend.especie, especialidad: pend.especialidad,\n    sede: pend.sede, fecha_cita: pend.fecha, hora_cita: pend.hora\n  } }];\n}\nreturn [{ json: { accion: 'responder', textoFinal: '🐾 ¿Podrás asistir a tu cita? Responde SI para confirmar o CANCELAR si no podrás asistir.' } }];"
+      },
+      "id": "code-confirmar-recordatorio",
+      "name": "Code Confirmar Recordatorio",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -800,
+        1620
+      ]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "loose",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "cr-cancel",
+              "leftValue": "={{ $json.accion }}",
+              "rightValue": "cancelar",
+              "operator": {
+                "type": "string",
+                "operation": "equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "id": "if-cancelar-recordatorio",
+      "name": "IF Cancelar Recordatorio",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        -580,
+        1620
+      ]
+    },
+    {
+      "parameters": {
+        "operation": "delete",
+        "calendar": {
+          "__rl": true,
+          "value": "={{ $json.calId }}",
+          "mode": "id"
+        },
+        "eventId": "={{ $json.event_id }}",
+        "options": {}
+      },
+      "id": "gcal-cancelar-recordatorio",
+      "name": "GCal Cancelar Recordatorio",
+      "type": "n8n-nodes-base.googleCalendar",
+      "typeVersion": 1.3,
+      "position": [
+        -360,
+        1560
+      ],
+      "alwaysOutputData": true,
+      "onError": "continueRegularOutput",
+      "credentials": {
+        "googleCalendarOAuth2Api": {
+          "id": "B8zSnf9T4rDsiHwt",
+          "name": "Google Calendar dacavet"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "const a = $('Code Confirmar Recordatorio').first().json;\nconst textoFinal = '🗑️ Tu cita fue cancelada.\\n\\n🐾 ' + a.mascota + (a.especie ? ' (' + a.especie + ')' : '') + '\\n🩺 ' + (a.especialidad || '') + '\\n📅 ' + a.fecha_cita + ' a las ' + a.hora_cita + '\\n🏥 ' + a.sede + \"\\n\\nGracias por avisarnos. Si quieres agendar otra cita, escribe 3. 🐾\";\nreturn [{ json: { event_id: String(a.event_id), estado: 'cancelada', recordatorio: 'Cancelada desde recordatorio', textoFinal } }];"
+      },
+      "id": "code-guardar-cancel-recordatorio",
+      "name": "Code Guardar Cancel Recordatorio",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -160,
+        1560
+      ]
+    },
+    {
+      "parameters": {
+        "operation": "update",
+        "documentId": {
+          "__rl": true,
+          "value": "1jFygCoys6lPfHi8Ip5owcBGcY3Ls13vFQvJnfIcIly0",
+          "mode": "id"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "Citas",
+          "mode": "name"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "event_id ": "={{ $json.event_id }}",
+            "estado": "={{ $json.estado }}",
+            "recordatorio": "={{ $json.recordatorio }}"
+          },
+          "matchingColumns": [
+            "event_id "
+          ],
+          "schema": []
+        },
+        "options": {}
+      },
+      "id": "sheets-actualizar-cancel-recordatorio",
+      "name": "Sheets Actualizar Cancel Recordatorio",
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.5,
+      "position": [
+        40,
+        1560
+      ],
+      "alwaysOutputData": true,
+      "onError": "continueRegularOutput",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "jGJOqR9SAx3N3hxy",
+          "name": "Google Sheets dacavet"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "chatId": "={{ $('Extraer Variables').item.json.chatId }}",
+        "text": "={{ $('Code Guardar Cancel Recordatorio').item.json.textoFinal }}",
+        "additionalFields": {
+          "appendAttribution": false,
+          "parse_mode": "HTML"
+        }
+      },
+      "id": "tg-confirmar-cancel-recordatorio",
+      "name": "Telegram Confirmar Cancel Recordatorio",
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        240,
+        1560
+      ],
+      "webhookId": "dacavet-confirmar-cancel-recordatorio-v2",
+      "credentials": {
+        "telegramApi": {
+          "id": "XLzbjAEEhE5jgsYe",
+          "name": "Telegram account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "documentId": {
+          "__rl": true,
+          "value": "1jFygCoys6lPfHi8Ip5owcBGcY3Ls13vFQvJnfIcIly0",
+          "mode": "id"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "configuracion",
+          "mode": "name"
+        },
+        "options": {}
+      },
+      "id": "leer-config-cancel",
+      "name": "Leer Configuracion Cancel",
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.5,
+      "position": [
+        -220,
+        2140
+      ],
+      "alwaysOutputData": true,
+      "onError": "continueRegularOutput",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "jGJOqR9SAx3N3hxy",
+          "name": "Google Sheets dacavet"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "const esc = s => String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');\nconst a = $('Code Agendar').first().json;\nconst ev = $('Extraer Variables').first().json;\nconst cfg = (($('Leer Configuracion Cancel').all() || []).map(i => i.json).filter(f => f && f.horario))[0] || {};\nconst duenoChatId = String(cfg['dueño'] || cfg['dueno'] || cfg.id || '5050987637');\nconst avisoTexto = '🗑️ Cancelación de cita — Agente Veterinario\\n\\n👤 Cliente: ' + esc(ev.nombre || 'Sin nombre') + '\\n🐾 ' + esc(a.mascota || '') + (a.especie ? ' (' + esc(a.especie) + ')' : '') + '\\n🩺 ' + esc(a.especialidad || '') + '\\n📅 ' + a.fecha_cita + ' a las ' + a.hora_cita + '\\n🏥 ' + esc(a.sede || '') + '\\n🆔 ChatID: ' + (ev.chatId || '');\nreturn [{ json: { duenoChatId, avisoTexto } }];"
+      },
+      "id": "code-avisar-dueno-cancel",
+      "name": "Code Avisar Dueno Cancel",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -20,
+        2140
+      ]
+    },
+    {
+      "parameters": {
+        "chatId": "={{ $json.duenoChatId }}",
+        "text": "={{ $json.avisoTexto }}",
+        "additionalFields": {
+          "appendAttribution": false,
+          "parse_mode": "HTML"
+        }
+      },
+      "id": "tg-avisar-dueno-cancel",
+      "name": "Telegram Avisar Dueno Cancel",
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        180,
+        2140
+      ],
+      "webhookId": "dacavet-avisar-dueno-cancel-v2",
+      "credentials": {
+        "telegramApi": {
+          "id": "XLzbjAEEhE5jgsYe",
+          "name": "Telegram account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "documentId": {
+          "__rl": true,
+          "value": "1jFygCoys6lPfHi8Ip5owcBGcY3Ls13vFQvJnfIcIly0",
+          "mode": "id"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "configuracion",
+          "mode": "name"
+        },
+        "options": {}
+      },
+      "id": "leer-config-cancel-recordatorio",
+      "name": "Leer Configuracion Cancel Recordatorio",
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.5,
+      "position": [
+        -160,
+        1740
+      ],
+      "alwaysOutputData": true,
+      "onError": "continueRegularOutput",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "jGJOqR9SAx3N3hxy",
+          "name": "Google Sheets dacavet"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "const esc = s => String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');\nconst a = $('Code Confirmar Recordatorio').first().json;\nconst ev = $('Extraer Variables').first().json;\nconst cfg = (($('Leer Configuracion Cancel Recordatorio').all() || []).map(i => i.json).filter(f => f && f.horario))[0] || {};\nconst duenoChatId = String(cfg['dueño'] || cfg['dueno'] || cfg.id || '5050987637');\nconst avisoTexto = '🗑️ Cancelación de cita (desde recordatorio) — Agente Veterinario\\n\\n👤 Cliente: ' + esc(ev.nombre || 'Sin nombre') + '\\n🐾 ' + esc(a.mascota || '') + (a.especie ? ' (' + esc(a.especie) + ')' : '') + '\\n🩺 ' + esc(a.especialidad || '') + '\\n📅 ' + a.fecha_cita + ' a las ' + a.hora_cita + '\\n🏥 ' + esc(a.sede || '') + '\\n🆔 ChatID: ' + (a.chatId || '');\nreturn [{ json: { duenoChatId, avisoTexto } }];"
+      },
+      "id": "code-avisar-dueno-cancel-recordatorio",
+      "name": "Code Avisar Dueno Cancel Recordatorio",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        40,
+        1740
+      ]
+    },
+    {
+      "parameters": {
+        "chatId": "={{ $json.duenoChatId }}",
+        "text": "={{ $json.avisoTexto }}",
+        "additionalFields": {
+          "appendAttribution": false,
+          "parse_mode": "HTML"
+        }
+      },
+      "id": "tg-avisar-dueno-cancel-recordatorio",
+      "name": "Telegram Avisar Dueno Cancel Recordatorio",
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        240,
+        1740
+      ],
+      "webhookId": "dacavet-avisar-dueno-cancel-recordatorio-v2",
+      "credentials": {
+        "telegramApi": {
+          "id": "XLzbjAEEhE5jgsYe",
+          "name": "Telegram account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "loose",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "noshow-1",
+              "leftValue": "={{ $json.estado }}",
+              "rightValue": "incumplida",
+              "operator": {
+                "type": "string",
+                "operation": "equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "id": "if-es-noshow",
+      "name": "IF Es Noshow",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        -580,
+        1080
+      ]
+    },
+    {
+      "parameters": {
+        "documentId": {
+          "__rl": true,
+          "value": "1jFygCoys6lPfHi8Ip5owcBGcY3Ls13vFQvJnfIcIly0",
+          "mode": "id"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "configuracion",
+          "mode": "name"
+        },
+        "options": {}
+      },
+      "id": "leer-config-seguimiento",
+      "name": "Leer Configuracion Seguimiento",
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.5,
+      "position": [
+        -360,
+        1080
+      ],
+      "alwaysOutputData": true,
+      "onError": "continueRegularOutput",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "jGJOqR9SAx3N3hxy",
+          "name": "Google Sheets dacavet"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "const esc = s => String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');\nconst c = $('Code Seguimiento Responder').first().json;\nconst cfg = (($('Leer Configuracion Seguimiento').all() || []).map(i => i.json).filter(f => f && f.horario))[0] || {};\nconst duenoChatId = String(cfg['dueño'] || cfg['dueno'] || cfg.id || '5050987637');\nconst avisoTexto = '⚠️ Inasistencia (no-show) — Agente Veterinario\\n\\n👤 Cliente: ' + esc(c.nombre || 'Sin nombre') + '\\n🐾 ' + esc(c.mascota || '') + (c.especie ? ' (' + esc(c.especie) + ')' : '') + '\\n🏥 ' + esc(c.sede || '') + '\\n🆔 ChatID: ' + (c.clienteChatId || '') + '\\n\\nEl cliente no asistió a su cita agendada.';\nreturn [{ json: { duenoChatId, avisoTexto } }];"
+      },
+      "id": "code-avisar-dueno-noshow",
+      "name": "Code Avisar Dueno Noshow",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -160,
+        1080
+      ]
+    },
+    {
+      "parameters": {
+        "chatId": "={{ $json.duenoChatId }}",
+        "text": "={{ $json.avisoTexto }}",
+        "additionalFields": {
+          "appendAttribution": false,
+          "parse_mode": "HTML"
+        }
+      },
+      "id": "tg-avisar-dueno-noshow",
+      "name": "Telegram Avisar Dueno Noshow",
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        40,
+        1080
+      ],
+      "webhookId": "dacavet-avisar-dueno-noshow-v2",
+      "credentials": {
+        "telegramApi": {
+          "id": "XLzbjAEEhE5jgsYe",
+          "name": "Telegram account"
+        }
+      }
+    }
+  ],
+  "connections": {
+    "Telegram Trigger": {
+      "main": [
+        [
+          {
+            "node": "IF Es Audio",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Extraer Variables": {
+      "main": [
+        [
+          {
+            "node": "Code Router",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Switch Opciones": {
+      "main": [
+        [
+          {
+            "node": "Leer Servicios",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Leer Faqs",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Leer Configuracion",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Leer Especialidad",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Code Seguimiento Responder",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Code Encuesta",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Code Respuesta Segura",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Code Respuesta Segura",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Leer Faqs Buscar",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Code Confirmar Recordatorio",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Code Menu",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Leer Servicios": {
+      "main": [
+        [
+          {
+            "node": "Code Servicios",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code Servicios": {
+      "main": [
+        [
+          {
+            "node": "Telegram Enviar",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Leer Faqs": {
+      "main": [
+        [
+          {
+            "node": "Code Faqs",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code Faqs": {
+      "main": [
+        [
+          {
+            "node": "Telegram Enviar",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code Menu": {
+      "main": [
+        [
+          {
+            "node": "Telegram Enviar",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Schedule Registro": {
+      "main": [
+        [
+          {
+            "node": "Code Flush Conversaciones",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code Flush Conversaciones": {
+      "main": [
+        [
+          {
+            "node": "Sheets Guardar Registro",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "IF Es Audio": {
+      "main": [
+        [
+          {
+            "node": "Telegram Descargar Audio",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Extraer Variables",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Telegram Descargar Audio": {
+      "main": [
+        [
+          {
+            "node": "OpenAI Transcribir",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "OpenAI Transcribir": {
+      "main": [
+        [
+          {
+            "node": "Normalizar Audio",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Normalizar Audio": {
+      "main": [
+        [
+          {
+            "node": "Extraer Variables",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code Router": {
+      "main": [
+        [
+          {
+            "node": "Switch Opciones",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Code Acumular Conversacion",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Leer Configuracion": {
+      "main": [
+        [
+          {
+            "node": "Code Asesor",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code Asesor": {
+      "main": [
+        [
+          {
+            "node": "Telegram Enviar",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Telegram Avisar Asesor",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Leer Especialidad": {
+      "main": [
+        [
+          {
+            "node": "Code Agendar",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code Agendar": {
+      "main": [
+        [
+          {
+            "node": "Switch Accion",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Switch Accion": {
+      "main": [
+        [
+          {
+            "node": "Telegram Enviar",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "GCal Listar Slots",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "GCal Crear Cita",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Leer Citas Usuario",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Leer Citas Reprog",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "GCal Reprogramar",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Code Menu",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Leer Citas Cancel",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "GCal Cancelar",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Sheets Guardar Encuesta",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "GCal Listar Slots": {
+      "main": [
+        [
+          {
+            "node": "Code Slots",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code Slots": {
+      "main": [
+        [
+          {
+            "node": "Telegram Enviar",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "GCal Crear Cita": {
+      "main": [
+        [
+          {
+            "node": "Code Guardar Cita",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code Guardar Cita": {
+      "main": [
+        [
+          {
+            "node": "Sheets Guardar Cita",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Sheets Guardar Cita": {
+      "main": [
+        [
+          {
+            "node": "Telegram Confirmar Cita",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Leer Citas Usuario": {
+      "main": [
+        [
+          {
+            "node": "Code Listar Citas",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code Listar Citas": {
+      "main": [
+        [
+          {
+            "node": "Telegram Enviar",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Leer Citas Reprog": {
+      "main": [
+        [
+          {
+            "node": "Code Reprog Listar",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code Reprog Listar": {
+      "main": [
+        [
+          {
+            "node": "Telegram Enviar",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "GCal Reprogramar": {
+      "main": [
+        [
+          {
+            "node": "Code Guardar Reprog",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code Guardar Reprog": {
+      "main": [
+        [
+          {
+            "node": "Sheets Actualizar Cita",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Sheets Actualizar Cita": {
+      "main": [
+        [
+          {
+            "node": "Telegram Confirmar Reprog",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Leer Citas Cancel": {
+      "main": [
+        [
+          {
+            "node": "Code Cancel Listar",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code Cancel Listar": {
+      "main": [
+        [
+          {
+            "node": "Telegram Enviar",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "GCal Cancelar": {
+      "main": [
+        [
+          {
+            "node": "Code Guardar Cancel",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Leer Configuracion Cancel",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Leer Configuracion Cancel": {
+      "main": [
+        [
+          {
+            "node": "Code Avisar Dueno Cancel",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code Avisar Dueno Cancel": {
+      "main": [
+        [
+          {
+            "node": "Telegram Avisar Dueno Cancel",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code Guardar Cancel": {
+      "main": [
+        [
+          {
+            "node": "Sheets Actualizar Cancel",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Sheets Actualizar Cancel": {
+      "main": [
+        [
+          {
+            "node": "Telegram Confirmar Cancel",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Schedule Recordatorio": {
+      "main": [
+        [
+          {
+            "node": "Leer Citas Recordatorio",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Leer Citas Recordatorio": {
+      "main": [
+        [
+          {
+            "node": "Code Recordatorio",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code Recordatorio": {
+      "main": [
+        [
+          {
+            "node": "Telegram Recordatorio",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Sheets Marcar Recordatorio",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Schedule Seguimiento": {
+      "main": [
+        [
+          {
+            "node": "Leer Citas Seguimiento",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Leer Citas Seguimiento": {
+      "main": [
+        [
+          {
+            "node": "Code Seguimiento Preguntar",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code Seguimiento Preguntar": {
+      "main": [
+        [
+          {
+            "node": "Telegram Preguntar Asesor",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code Seguimiento Responder": {
+      "main": [
+        [
+          {
+            "node": "Sheets Actualizar Seguimiento",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Code Iniciar Encuesta",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "IF Es Noshow",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "IF Es Noshow": {
+      "main": [
+        [
+          {
+            "node": "Leer Configuracion Seguimiento",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        []
+      ]
+    },
+    "Leer Configuracion Seguimiento": {
+      "main": [
+        [
+          {
+            "node": "Code Avisar Dueno Noshow",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code Avisar Dueno Noshow": {
+      "main": [
+        [
+          {
+            "node": "Telegram Avisar Dueno Noshow",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Sheets Actualizar Seguimiento": {
+      "main": [
+        [
+          {
+            "node": "Telegram Confirmar Asesor",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code Iniciar Encuesta": {
+      "main": [
+        [
+          {
+            "node": "Telegram Enviar Encuesta",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code Encuesta": {
+      "main": [
+        [
+          {
+            "node": "Switch Accion",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Sheets Guardar Encuesta": {
+      "main": [
+        [
+          {
+            "node": "Telegram Confirmar Encuesta",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code Respuesta Segura": {
+      "main": [
+        [
+          {
+            "node": "Telegram Enviar",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Leer Faqs Buscar": {
+      "main": [
+        [
+          {
+            "node": "Code Buscar FAQ",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code Buscar FAQ": {
+      "main": [
+        [
+          {
+            "node": "Telegram Enviar",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code Confirmar Recordatorio": {
+      "main": [
+        [
+          {
+            "node": "IF Cancelar Recordatorio",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "IF Cancelar Recordatorio": {
+      "main": [
+        [
+          {
+            "node": "GCal Cancelar Recordatorio",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Telegram Enviar",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "GCal Cancelar Recordatorio": {
+      "main": [
+        [
+          {
+            "node": "Code Guardar Cancel Recordatorio",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Leer Configuracion Cancel Recordatorio",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Leer Configuracion Cancel Recordatorio": {
+      "main": [
+        [
+          {
+            "node": "Code Avisar Dueno Cancel Recordatorio",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code Avisar Dueno Cancel Recordatorio": {
+      "main": [
+        [
+          {
+            "node": "Telegram Avisar Dueno Cancel Recordatorio",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code Guardar Cancel Recordatorio": {
+      "main": [
+        [
+          {
+            "node": "Sheets Actualizar Cancel Recordatorio",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Sheets Actualizar Cancel Recordatorio": {
+      "main": [
+        [
+          {
+            "node": "Telegram Confirmar Cancel Recordatorio",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "pinData": {},
+  "meta": {
+    "instanceId": "064b170c5e8b914369b9feeabc0e8be537f0ec4592e6b73d91bc93e5220038ec"
+  }
+}
