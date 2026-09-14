@@ -489,17 +489,8 @@
           "mode": "name"
         },
         "columns": {
-          "mappingMode": "defineBelow",
-          "value": {
-            "timestamp": "={{ $json.timestamp }}",
-            "horario": "={{ $json.horario }}",
-            "chatId": "={{ $json.chatId }}",
-            "nombre": "={{ $json.nombre }}",
-            "mensaje": "={{ $json.mensaje }}",
-            "hora_bogota": "={{ $json.hora_bogota }}",
-            "dia": "={{ $json.dia }}",
-            "sede": "={{ $json.sede }}"
-          },
+          "mappingMode": "autoMapInputData",
+          "value": {},
           "matchingColumns": [],
           "schema": []
         },
@@ -1113,7 +1104,20 @@
             "estado": "={{ $json.estado }}"
           },
           "matchingColumns": [],
-          "schema": []
+          "schema": [
+            { "id": "timestamp", "displayName": "timestamp", "required": false, "defaultMatch": false, "display": true, "type": "string", "canBeUsedToMatch": true },
+            { "id": "event_id ", "displayName": "event_id ", "required": false, "defaultMatch": false, "display": true, "type": "string", "canBeUsedToMatch": true },
+            { "id": "chatId", "displayName": "chatId", "required": false, "defaultMatch": false, "display": true, "type": "string", "canBeUsedToMatch": true },
+            { "id": "nombre", "displayName": "nombre", "required": false, "defaultMatch": false, "display": true, "type": "string", "canBeUsedToMatch": true },
+            { "id": "mascota", "displayName": "mascota", "required": false, "defaultMatch": false, "display": true, "type": "string", "canBeUsedToMatch": true },
+            { "id": "especie", "displayName": "especie", "required": false, "defaultMatch": false, "display": true, "type": "string", "canBeUsedToMatch": true },
+            { "id": "mensaje", "displayName": "mensaje", "required": false, "defaultMatch": false, "display": true, "type": "string", "canBeUsedToMatch": true },
+            { "id": "especialidad", "displayName": "especialidad", "required": false, "defaultMatch": false, "display": true, "type": "string", "canBeUsedToMatch": true },
+            { "id": "hora_cita ", "displayName": "hora_cita ", "required": false, "defaultMatch": false, "display": true, "type": "string", "canBeUsedToMatch": true },
+            { "id": "fecha_cita ", "displayName": "fecha_cita ", "required": false, "defaultMatch": false, "display": true, "type": "string", "canBeUsedToMatch": true },
+            { "id": "sede", "displayName": "sede", "required": false, "defaultMatch": false, "display": true, "type": "string", "canBeUsedToMatch": true },
+            { "id": "estado", "displayName": "estado", "required": false, "defaultMatch": false, "display": true, "type": "string", "canBeUsedToMatch": true }
+          ]
         },
         "options": {}
       },
@@ -1313,7 +1317,12 @@
           "matchingColumns": [
             "event_id "
           ],
-          "schema": []
+          "schema": [
+            { "id": "event_id ", "displayName": "event_id ", "required": false, "defaultMatch": true, "display": true, "type": "string", "canBeUsedToMatch": true },
+            { "id": "hora_cita ", "displayName": "hora_cita ", "required": false, "defaultMatch": false, "display": true, "type": "string", "canBeUsedToMatch": true },
+            { "id": "fecha_cita ", "displayName": "fecha_cita ", "required": false, "defaultMatch": false, "display": true, "type": "string", "canBeUsedToMatch": true },
+            { "id": "recordatorio", "displayName": "recordatorio", "required": false, "defaultMatch": false, "display": true, "type": "string", "canBeUsedToMatch": true }
+          ]
         },
         "options": {}
       },
@@ -1467,7 +1476,11 @@
           "matchingColumns": [
             "event_id "
           ],
-          "schema": []
+          "schema": [
+            { "id": "event_id ", "displayName": "event_id ", "required": false, "defaultMatch": true, "display": true, "type": "string", "canBeUsedToMatch": true },
+            { "id": "estado", "displayName": "estado", "required": false, "defaultMatch": false, "display": true, "type": "string", "canBeUsedToMatch": true },
+            { "id": "recordatorio", "displayName": "recordatorio", "required": false, "defaultMatch": false, "display": true, "type": "string", "canBeUsedToMatch": true }
+          ]
         },
         "options": {}
       },
@@ -1624,7 +1637,10 @@
           "matchingColumns": [
             "event_id "
           ],
-          "schema": []
+          "schema": [
+            { "id": "event_id ", "displayName": "event_id ", "required": false, "defaultMatch": true, "display": true, "type": "string", "canBeUsedToMatch": true },
+            { "id": "recordatorio", "displayName": "recordatorio", "required": false, "defaultMatch": false, "display": true, "type": "string", "canBeUsedToMatch": true }
+          ]
         },
         "options": {}
       },
@@ -1769,7 +1785,10 @@
           "matchingColumns": [
             "event_id "
           ],
-          "schema": []
+          "schema": [
+            { "id": "event_id ", "displayName": "event_id ", "required": false, "defaultMatch": true, "display": true, "type": "string", "canBeUsedToMatch": true },
+            { "id": "estado", "displayName": "estado", "required": false, "defaultMatch": false, "display": true, "type": "string", "canBeUsedToMatch": true }
+          ]
         },
         "options": {}
       },
@@ -1880,16 +1899,8 @@
           "mode": "name"
         },
         "columns": {
-          "mappingMode": "defineBelow",
-          "value": {
-            "timestamp": "={{ $json.timestamp }}",
-            "chatId": "={{ $json.chatId }}",
-            "nombre": "={{ $json.nombre }}",
-            "mascota": "={{ $json.mascota }}",
-            "sede": "={{ $json.sede }}",
-            "calificacion": "={{ $json.calificacion }}",
-            "comentario": "={{ $json.comentario }}"
-          },
+          "mappingMode": "autoMapInputData",
+          "value": {},
           "matchingColumns": [],
           "schema": []
         },
@@ -2104,7 +2115,11 @@
           "matchingColumns": [
             "event_id "
           ],
-          "schema": []
+          "schema": [
+            { "id": "event_id ", "displayName": "event_id ", "required": false, "defaultMatch": true, "display": true, "type": "string", "canBeUsedToMatch": true },
+            { "id": "estado", "displayName": "estado", "required": false, "defaultMatch": false, "display": true, "type": "string", "canBeUsedToMatch": true },
+            { "id": "recordatorio", "displayName": "recordatorio", "required": false, "defaultMatch": false, "display": true, "type": "string", "canBeUsedToMatch": true }
+          ]
         },
         "options": {}
       },
